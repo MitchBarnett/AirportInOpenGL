@@ -1,0 +1,257 @@
+#include "stdafx.h"
+#include "Game.h"
+#include "Model.h"
+
+
+Game::Game()
+{
+	// we don't use RAII currently so no action in constructor
+}
+
+Game::~Game()
+{
+}
+
+void Game::CreateGLWindow(HDC hdc, RECT rect)
+{
+	m_win32OpenGL.CreateGLContext(hdc);	// may throw an exception!!!
+										// MessageBoxA(0, (char*)glGetString(GL_VERSION), "OPENGL VERSION", 0);
+	m_aspectRatio = static_cast<float>(rect.right / rect.bottom);
+	m_win32OpenGL.CreateShadersAndProgram("PhongTexture2");
+	//m_win32OpenGL.CreateShadersAndProgram("phong");
+	//m_win32OpenGL.CreateShadersAndProgram("flatVerticesAsColours");
+	//m_win32OpenGL.CreateShadersAndProgram("diffuseOnly");
+	//m_win32OpenGL.CreateShadersAndProgram("texture");
+
+}
+
+void Game::DestroyGLWindow()
+{
+	m_win32OpenGL.TearDownGLContext();
+}
+
+
+void Game::PrepareToDraw()
+{
+	m_lightColours.push_back(vec3{ 1.0f, 0.0f, 0.0f });
+	m_lightColours.push_back(vec3{ 0.0f, 1.0f, 0.0f });
+	m_lightColours.push_back(vec3{ 0.0f, 0.0f, 1.0f });
+	m_lightColours.push_back(vec3{ 1.0f, 1.0f, 1.0f });
+
+	ComputeProjectionMatrix();
+	ComputeViewMatrix();
+	// we compute the model matrix in the draw routine so we can animate the
+	// triangle
+
+	// send the matrixes to the shader
+	GLuint program = m_win32OpenGL.GetShaderProgram();
+	Win32OpenGL::SendUniformMatrixToShader(program, m_projectionMatrix.m, "projection_matrix");
+	Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
+
+	Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
+
+	Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourSpecular.v, "light_colour_specular");
+	Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourDiffuse.v, "light_colour_diffuse");
+	Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourAmbient.v, "light_colour_ambient");
+
+
+	vec3 surfaceColour = vec3(1.0, 1.0, 0.0);
+	Win32OpenGL::SendUniformVector3ToShader(program, surfaceColour.v, "surface_colour");
+
+	// now load in the model as with lighting
+
+
+	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp", vec3{ -1,-1,0 }));
+	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp", vec3{ 0,-0.5,0 }));
+	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp", vec3{ 1, 0, 0 }));
+	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp", vec3{ 2,0.5,0 }));
+	//m_models.push_back(new Model("Models\\laptop.obj", "Textures\\laptop.bddd6mp", vec3{ 1,0.5,0 }));
+	m_models.push_back(new Model("Models\\wood.obj", "Textures\\WoodTexture3.bmp", vec3{ -2,-1,0 }));
+	m_models.push_back(new Model("Models\\oildrum.obj", "Textures\\oildrum.bmp", vec3{ -3,-1,0 }));
+	m_models.push_back(new Model("Models\\groundPlane.obj", "Textures\\grass.bmp", vec3{ -1,-1,0 }));
+}
+
+void Game::Draw()
+{
+	m_win32OpenGL.ClearGLDisplay();
+	GLuint program = m_win32OpenGL.GetShaderProgram();
+
+	for (int i = 0; i < m_models.size(); i++)
+	{
+		m_models[i]->draw(program);
+	}
+
+	m_win32OpenGL.FinishedDrawing();
+}
+
+void Game::Update()
+{
+	// we tumble the cube to see all the faces.
+}
+
+void Game::HandleInput(unsigned char virtualKeyCode)
+{
+	// add code for interaction here
+	if (virtualKeyCode == VK_UP)
+	{
+		m_cameraY += 0.1f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
+	}
+	else if (virtualKeyCode == VK_DOWN)
+	{
+		m_cameraY -= 0.1f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
+	}
+
+	else if (virtualKeyCode == VK_LEFT)
+	{
+		m_cameraX -= 0.1f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
+	}
+	else if (virtualKeyCode == VK_RIGHT)
+	{
+		m_cameraX += 0.1f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
+	}
+	else if (virtualKeyCode == VK_OEM_PLUS)
+	{
+		m_cameraZ -= 0.1f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
+	}
+	else if (virtualKeyCode == VK_OEM_MINUS)
+	{
+		m_cameraZ += 0.1f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
+	}
+	else if (virtualKeyCode == VK_NUMPAD4)
+	{
+		m_lightPosition.v[0] = -50.f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
+	}
+	else if (virtualKeyCode == VK_NUMPAD6)
+	{
+		m_lightPosition.v[0] = 50.0f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
+	}
+	else if (virtualKeyCode == VK_NUMPAD8)
+	{
+		m_lightPosition.v[1] = 50.0f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
+	}
+	else if (virtualKeyCode == VK_NUMPAD2)
+	{
+		m_lightPosition.v[1] = -50.0f;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
+	}
+
+	else if (virtualKeyCode == VK_NUMPAD5)
+	{
+		m_lightPosition.v[0] = 0;
+		m_lightPosition.v[1] = 0;
+		ComputeViewMatrix();
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
+	}
+
+	else if (virtualKeyCode == VK_SPACE)
+	{
+		m_currentLight++;
+		m_lightColourDiffuse = m_lightColours[m_currentLight % 4];
+		GLuint program = m_win32OpenGL.GetShaderProgram();
+		Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourDiffuse.v, "light_colour_diffuse");
+
+	}
+}
+
+void Game::Resize(HDC hdc, RECT rect)
+{
+	// if the display is resized then OpenGL needs to know about the apect ratio
+	// to compute the correct projection matrix
+	m_win32OpenGL.Reshape(hdc, rect.right, rect.bottom);
+	m_aspectRatio = (float)rect.right / rect.bottom;
+	ComputeProjectionMatrix();
+	GLuint program = m_win32OpenGL.GetShaderProgram();
+	Win32OpenGL::SendUniformMatrixToShader(program, m_projectionMatrix.m, "projection_matrix");
+}
+
+void Game::ComputeProjectionMatrix()
+{
+	// we will look at this later in the course
+	// in Modern OpenGL we must supply a projection matrix
+
+#define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
+
+	// input variables
+	float zNear = 0.1f;		// clipping plane
+	float zFar = 500.0f;	// clipping plane
+	float fov = static_cast<float>(67.0f * ONE_DEG_IN_RAD); // convert 67 degrees to radians
+
+	float range = tan(fov * 0.5f) * zNear;
+	float Sx = (2.0f * zNear) / (range * m_aspectRatio + range * m_aspectRatio);
+	float Sy = zNear / range;
+	float Sz = -(zFar + zNear) / (zFar - zNear);
+	float Pz = -(2.0f * zFar * zNear) / (zFar - zNear);
+	GLfloat proj_mat[] = {
+		Sx, 0.0f, 0.0f, 0.0f,
+		0.0f, Sy, 0.0f, 0.0f,
+		0.0f, 0.0f, Sz, -1.0f,
+		0.0f, 0.0f, Pz, 0.0f
+	};
+	for (int i = 0; i < 16; i++)
+	{
+		m_projectionMatrix.m[i] = proj_mat[i];
+	}
+}
+
+void Game::ComputeViewMatrix()
+{
+	// the view matrix allows us to implement a camera.
+	// this is based on Anton's simpler version (see recommended books)  
+	// - later we implement a lookAt matrix here....
+	float cam_pos[] = { m_cameraX, m_cameraY, m_cameraZ }; // don't start at zero, or we will be too close
+	float cam_cameraYaw = 0.0f; // y-rotation in degrees
+	mat4 T = translate(identity_mat4(), vec3(-cam_pos[0], -cam_pos[1], -cam_pos[2]));
+	mat4 R = rotate_y_deg(identity_mat4(), -cam_cameraYaw);
+	m_viewMatrix = R * T;
+}
+
+bool Game::SimpleLoadTexture(string fileName, char* imageData)
+{
+	// we will replace this with code to read a BMP file and analyse the header in the next lab
+	// for now we ASSUME a 256x256 pixel array of RGB data as unsigned bytes
+
+	ifstream texFile;
+	// important to ensure file is treated as binary data
+	// char(28) is a file separator char
+	// read in first texture
+	texFile.open(fileName, ios::binary);
+	if (!texFile)
+	{
+		cout << "error opening texture: " << fileName << endl;
+		return false;
+	}
+
+	texFile.read(imageData, 256 * 256 * 3);
+	texFile.close();
+	return true;
+}
