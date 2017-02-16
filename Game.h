@@ -4,22 +4,22 @@
 #include "Log.h"
 #include "Model.h"
 #include "Camera.h"
+#include <Windows.h>
 //#include "Light.h"
 
 class Game
 {
 	// open gl helper class
 	Win32OpenGL m_win32OpenGL;
-
-	float m_cameraX{ 0 };
-	float m_cameraY{ 0 };
-	float m_cameraZ{ 3.5f };
-
+	Camera m_MainCamera;
+	HWND m_window;
 	// matrices
-	mat4 m_viewMatrix;
 	mat4 m_projectionMatrix;
 
 	vector<vec3> m_lightColours;
+	POINT m_currentMousePos;
+	POINT m_lastMousePos;
+
 	int m_currentLight = 3;
 
 	float m_aspectRatio;
@@ -36,7 +36,7 @@ public:
 	Game();
 	~Game();
 
-	void CreateGLWindow(HDC hdc, RECT rect);
+	void CreateGLWindow(HDC hdc, RECT rect, HWND window);
 	void DestroyGLWindow();
 
 	void PrepareToDraw();
@@ -44,12 +44,13 @@ public:
 
 	void Update();
 
+	void HandleMouse();
 	void HandleInput(unsigned char virtualKeyCode);
+	void setSensitivity(float sensitivity);
 
 	void Resize(HDC hdc, RECT rect);
 
 	void ComputeProjectionMatrix();
-	void ComputeViewMatrix();
 
 	bool SimpleLoadTexture(string fileName, char* imageData);
 };

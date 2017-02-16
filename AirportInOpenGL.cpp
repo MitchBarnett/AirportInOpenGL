@@ -3,12 +3,12 @@
 
 #include "stdafx.h"
 #include "AirportInOpenGL.h"
-
+#include <windowsx.h >
 #include "mmsystem.h"	// For game loop timer
-#include "Game.h"		
+#include <tchar.h>
+#include "Game.h"
 
 #define MAX_LOADSTRING 100
-
 // Message for requesting a new frame
 #define WM_GAMEFRAME (WM_USER + 1)
 
@@ -16,11 +16,16 @@
 HINSTANCE		hInst;								// current instance
 WCHAR			szTitle[MAX_LOADSTRING];			// The title bar text
 WCHAR			szWindowClass[MAX_LOADSTRING];		// The main window class name
+RECT			rect;
 HWND			hWnd;								// An identifier for the window to draw on 
 Game			game;								// Holds a scenes that can be rendered
 unsigned int	mmTimerDelay = 1000 / 50;			//50Hz = 20ms per frame
 unsigned int	mmTimerId;
 bool			mmTimerInitialised = false;			// If the timer has been started
+POINT currMousePos;
+POINT lastMousePos;
+POINT resetMousePos;
+POINT resultPos;
 													// keyboard state stored here 256 bits = 32 unsigned chars
 static unsigned char keyState[32]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 static unsigned char masks[8]{ 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
@@ -31,6 +36,7 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    Options(HWND, UINT, WPARAM, LPARAM);
 void CALLBACK		GetTimerEvent(UINT IDEvent, UINT reserved, DWORD dwUser, DWORD	dwReserved1, DWORD	dwReserved2);
 void DealWithKeyPress(HWND hWnd, WPARAM wParam, bool isKeydown);
 bool InitialiseMMTimer();
@@ -62,6 +68,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	{
 		return FALSE;
 	}
+
+
+	// INFO: this is where the mouse will reappear if outside the safe zone
+	resetMousePos.x = (rect.left + rect.right) / 2;
+	resetMousePos.y = (rect.top + rect.bottom) / 2;
+
+	// INFO: the initial difference should be 0
+	currMousePos.x = resetMousePos.x;
+	currMousePos.y = resetMousePos.y;
+	lastMousePos = currMousePos;
+
+	// INFO: the result is affected by the mouse movement - you would rotate the camera instead
+	resultPos.x = 0;
+	resultPos.y = 0;
+
+	POINT temp = currMousePos;
+	ClientToScreen(hWnd, &temp);
+	SetCursorPos(temp.x, temp.y);
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_AIRPORTINOPENGL));
 
     MSG msg;
@@ -148,7 +172,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc;				// Handle to device context
-	RECT rect;				// Holds the viewPort
     switch (message)
     {
 	case WM_GAMEFRAME:
@@ -159,10 +182,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		// here is where we create our open gl context
 		hdc = GetDC(hWnd);
 		GetClientRect(hWnd, &rect);
-		game.CreateGLWindow(hdc, rect);
+		game.CreateGLWindow(hdc, rect, hWnd);
 
 		// prepare vbo's and vao's and setup shader
 		game.PrepareToDraw();
+		SetCursorPos(rect.left + ((rect.right - rect.left) / 2), rect.top + ((rect.bottom - rect.top) / 2));
 		break;
 
 	case WM_PAINT:
@@ -186,6 +210,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // Parse the menu selections:
             switch (wmId)
             {
+			case IDM_CONTROLS:
+				DialogBox(hInst, MAKEINTRESOURCE(IDD_CONTROLSBOX), hWnd, About);
+				break;
+			case IDM_OPTIONS:
+				DialogBox(hInst, MAKEINTRESOURCE(IDD_OPTIONSBOX), hWnd, Options);
+				break;
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
@@ -200,7 +230,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_KEYDOWN:
 		DealWithKeyPress(hWnd, wParam, true);
 		break;
-
+	case WM_MOUSEMOVE:
+		game.HandleMouse();
+		break;
+	
 	case WM_KEYUP:
 		DealWithKeyPress(hWnd, wParam, false);
 		break;
@@ -208,13 +241,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
-    default:
+	default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
 }
 
-// Message handler for about box.
+// Message handler for options box.
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lParam);
@@ -232,6 +265,28 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+INT_PTR CALLBACK Options(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			wchar_t Text[300] = { 0 };
+			GetWindowText(GetDlgItem(hDlg, IDC_EDIT1), Text, 300);
+			game.setSensitivity(stof(Text));
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
 }
 
 bool InitialiseMMTimer()
@@ -333,6 +388,11 @@ void	DealWithKeyPress(HWND hWnd, WPARAM wParam, bool isKeydown)
 		// clear the bit
 		keyState[keyByte] &= (~keyMask);
 	}
+}
+
+void	DealMouseMove(HWND hWnd, WPARAM wParam)
+{
+	
 }
 
 bool IsKeyPressed(unsigned char keyCode)

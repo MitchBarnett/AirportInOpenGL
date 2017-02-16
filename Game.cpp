@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "Model.h"
+#include "Log.h"
+#include "Mouse.h"
 
 
 Game::Game()
@@ -12,12 +14,13 @@ Game::~Game()
 {
 }
 
-void Game::CreateGLWindow(HDC hdc, RECT rect)
+void Game::CreateGLWindow(HDC hdc, RECT rect, HWND window)
 {
+	m_window = window;
 	m_win32OpenGL.CreateGLContext(hdc);	// may throw an exception!!!
 										// MessageBoxA(0, (char*)glGetString(GL_VERSION), "OPENGL VERSION", 0);
 	m_aspectRatio = static_cast<float>(rect.right / rect.bottom);
-	m_win32OpenGL.CreateShadersAndProgram("PhongTexture2");
+	m_win32OpenGL.CreateShadersAndProgram("PhongTexture");
 	//m_win32OpenGL.CreateShadersAndProgram("phong");
 	//m_win32OpenGL.CreateShadersAndProgram("flatVerticesAsColours");
 	//m_win32OpenGL.CreateShadersAndProgram("diffuseOnly");
@@ -39,24 +42,20 @@ void Game::PrepareToDraw()
 	m_lightColours.push_back(vec3{ 1.0f, 1.0f, 1.0f });
 
 	ComputeProjectionMatrix();
-	ComputeViewMatrix();
+	m_MainCamera.computeViewMatrixUsingLookAt();
 	// we compute the model matrix in the draw routine so we can animate the
 	// triangle
 
 	// send the matrixes to the shader
 	GLuint program = m_win32OpenGL.GetShaderProgram();
 	Win32OpenGL::SendUniformMatrixToShader(program, m_projectionMatrix.m, "projection_matrix");
-	Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
+	m_MainCamera.setViewMatrix(program);
 
 	Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
 
 	Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourSpecular.v, "light_colour_specular");
 	Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourDiffuse.v, "light_colour_diffuse");
 	Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourAmbient.v, "light_colour_ambient");
-
-
-	vec3 surfaceColour = vec3(1.0, 1.0, 0.0);
-	Win32OpenGL::SendUniformVector3ToShader(program, surfaceColour.v, "surface_colour");
 
 	// now load in the model as with lighting
 
@@ -88,12 +87,43 @@ void Game::Update()
 {
 	// we tumble the cube to see all the faces.
 }
+void Game::HandleMouse()
+{
+	m_currentMousePos = Mouse::getPosition(m_window);
+
+	POINT difference;
+	difference.x = m_currentMousePos.x - m_lastMousePos.x;
+	difference.y = m_currentMousePos.y - m_lastMousePos.y;
+
+	m_MainCamera.handleInput(difference.x, difference.y);
+	m_lastMousePos = m_currentMousePos;
+
+	if (difference.x != 0 || difference.y != 0)
+	{
+		RECT clientArea;
+		POINT windowCenter;
+		GetClientRect(m_window, &clientArea);
+		windowCenter.x = clientArea.right / 2;
+		windowCenter.y = clientArea.bottom / 2;
+		m_lastMousePos = windowCenter;
+
+		Mouse::setPosition(windowCenter, m_window);
+	}
+	m_MainCamera.handleInput(difference.x, difference.y);
+	GLuint program = m_win32OpenGL.GetShaderProgram();
+	m_MainCamera.setViewMatrix(program);
+}
 
 void Game::HandleInput(unsigned char virtualKeyCode)
 {
 	// add code for interaction here
-	if (virtualKeyCode == VK_UP)
+	m_MainCamera.handleInput(virtualKeyCode);
+	GLuint program = m_win32OpenGL.GetShaderProgram();
+	m_MainCamera.setViewMatrix(program);
+
+	/*if (virtualKeyCode == VK_UP)
 	{
+
 		m_cameraY += 0.1f;
 		ComputeViewMatrix();
 		GLuint program = m_win32OpenGL.GetShaderProgram();
@@ -180,7 +210,12 @@ void Game::HandleInput(unsigned char virtualKeyCode)
 		GLuint program = m_win32OpenGL.GetShaderProgram();
 		Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourDiffuse.v, "light_colour_diffuse");
 
-	}
+	}*/
+}
+
+void Game::setSensitivity(float sensitivity)
+{
+	m_MainCamera.lookSensitivity = sensitivity;
 }
 
 void Game::Resize(HDC hdc, RECT rect)
@@ -223,17 +258,6 @@ void Game::ComputeProjectionMatrix()
 	}
 }
 
-void Game::ComputeViewMatrix()
-{
-	// the view matrix allows us to implement a camera.
-	// this is based on Anton's simpler version (see recommended books)  
-	// - later we implement a lookAt matrix here....
-	float cam_pos[] = { m_cameraX, m_cameraY, m_cameraZ }; // don't start at zero, or we will be too close
-	float cam_cameraYaw = 0.0f; // y-rotation in degrees
-	mat4 T = translate(identity_mat4(), vec3(-cam_pos[0], -cam_pos[1], -cam_pos[2]));
-	mat4 R = rotate_y_deg(identity_mat4(), -cam_cameraYaw);
-	m_viewMatrix = R * T;
-}
 
 bool Game::SimpleLoadTexture(string fileName, char* imageData)
 {
