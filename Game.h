@@ -4,6 +4,7 @@
 #include "Log.h"
 #include "Model.h"
 #include "Camera.h"
+#include "Light.h"
 #include <Windows.h>
 //#include "Light.h"
 
@@ -11,7 +12,6 @@ class Game
 {
 	// open gl helper class
 	Win32OpenGL m_win32OpenGL;
-	Camera m_MainCamera;
 	HWND m_window;
 	// matrices
 	mat4 m_projectionMatrix;
@@ -24,11 +24,8 @@ class Game
 
 	float m_aspectRatio;
 
-	// and this is from the lighting
-	vec3 m_lightColourSpecular{ 1.0f,1.0f,1.0f };
-	vec3 m_lightColourDiffuse{ 0.8f, 0.8f, 0.8f };
-	vec3 m_lightColourAmbient{ 0.3f, 0.3f, 0.3f };
-	vec3 m_lightPosition{ 0.0f, 5.0f, 5.0f };
+	Camera m_MainCamera;
+	Light m_mainLight{ vec3{ 0.0f, 5.0f, 5.0f } };
 
 	vector<Model*> m_models;
 

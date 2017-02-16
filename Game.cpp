@@ -51,11 +51,7 @@ void Game::PrepareToDraw()
 	Win32OpenGL::SendUniformMatrixToShader(program, m_projectionMatrix.m, "projection_matrix");
 	m_MainCamera.setViewMatrix(program);
 
-	Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
-
-	Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourSpecular.v, "light_colour_specular");
-	Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourDiffuse.v, "light_colour_diffuse");
-	Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourAmbient.v, "light_colour_ambient");
+	m_mainLight.sendToShader(program);
 
 	// now load in the model as with lighting
 
