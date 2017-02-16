@@ -9,7 +9,7 @@ public:
 	Camera();
 	~Camera();
 
-	float lookSensitivity = 0.25;
+	float lookSensitivity = 1;
 
 	const float startX = 0;
 	const float startY = 1.5f;

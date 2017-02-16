@@ -164,8 +164,8 @@ void Camera::handleInput(unsigned char keyCode)
 
 void Camera::handleInput(int mouseMoveX, int mouseMoveY)
 {
-	m_angleXZ += mouseMoveX * lookSensitivity;
-	m_angleYZ += mouseMoveY * lookSensitivity;
+	m_angleXZ += mouseMoveX * (lookSensitivity / 10);
+	m_angleYZ += mouseMoveY * (lookSensitivity / 10);
 	computeDirectionVector();
 	updateCameraPosition(0, 0);
 	computeViewMatrixUsingLookAt();
