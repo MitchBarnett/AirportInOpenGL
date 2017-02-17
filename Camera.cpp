@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Camera.h"
 
-
 Camera::Camera()
 {
 }
@@ -72,13 +71,13 @@ void Camera::computeViewMatrixUsingLookAt()
 
 void Camera::computeDirectionVector()
 {
-	float angleYZRadians = 3.14156f * m_angleYZ / 180.0f;
+	float angleYZRadians = 3.14156f * m_pitch / 180.0f;
 
 	m_forward.v[1] = sin(angleYZRadians);
 
 	float m_other = cos(angleYZRadians);
 
-	float angleXZRadians = 3.14156f * m_angleXZ / 180.0f;
+	float angleXZRadians = 3.14156f * m_yaw / 180.0f;
 	m_forward.v[0] = m_other * sin(angleXZRadians);
 	m_forward.v[2] = m_other * -cos(angleXZRadians);
 
@@ -113,19 +112,19 @@ void Camera::handleInput(unsigned char keyCode)
 
 	if (keyCode == VK_LEFT)
 	{
-		m_angleXZ -= angleStep;
+		m_yaw -= angleStep;
 	}
 	else if (keyCode == VK_RIGHT)
 	{
-		m_angleXZ += angleStep;
+		m_yaw += angleStep;
 	}
 	else if (keyCode == VK_UP)
 	{
-		m_angleYZ += angleStep;
+		m_pitch += angleStep;
 	}
 	else if (keyCode == VK_DOWN)
 	{
-		m_angleYZ -= angleStep;
+		m_pitch -= angleStep;
 	}
 	else if (keyCode == 'W')
 	{
@@ -164,8 +163,8 @@ void Camera::handleInput(unsigned char keyCode)
 
 void Camera::handleInput(int mouseMoveX, int mouseMoveY)
 {
-	m_angleXZ += mouseMoveX * (lookSensitivity / 10);
-	m_angleYZ += mouseMoveY * (lookSensitivity / 10);
+	m_yaw += mouseMoveX * (lookSensitivity / 10);
+	m_pitch += mouseMoveY * (lookSensitivity / 10);
 	computeDirectionVector();
 	updateCameraPosition(0, 0);
 	computeViewMatrixUsingLookAt();

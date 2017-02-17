@@ -1,8 +1,13 @@
 #pragma once
 
 #include "MathFunc.h"
-#include "Win32OpenGL.h"
+#include "win32OpenGl.h"
 
+/*!
+A viewpoint from which the scene will be rendered.
+
+
+*/
 class Camera
 {
 public:
@@ -19,9 +24,9 @@ public:
 	vec3 m_position{ startX, startY, startZ };
 
 
-	float m_angleXY{ 0 };
-	float m_angleXZ{ 0 };
-	float m_angleYZ{ 0 };
+	float m_yaw{ 0 };
+	float m_roll{ 0 };
+	float m_pitch{ 0 };
 	
 	vec3 m_up{ 0,1,0 };
 	vec3 m_forward{ 0, 0, 0 };

@@ -150,7 +150,7 @@
     <ClInclude Include="AirportInOpenGL.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MathFunc.h" />
     <ClInclude Include="Model.h" />
@@ -166,7 +166,7 @@
     <ClCompile Include="AirportInOpenGL.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MathFunc.cpp" />
     <ClCompile Include="Model.cpp" />
