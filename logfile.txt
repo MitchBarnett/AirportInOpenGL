@@ -11816,3 +11816,123 @@ Creating shader: Shaders\PhongTexture.frag
 Shader compiled
 Program valid
 Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created
+Creating shader: Shaders\PhongTexture.vert
+Shader compiled
+Creating shader: Shaders\PhongTexture.frag
+Shader compiled
+Program valid
+Program created

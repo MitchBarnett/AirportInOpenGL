@@ -96,15 +96,15 @@ void Camera::update()
 	{
 		m_yaw -= angleStep;
 	}
-	else if (Keyboard::checkKeyDown(VK_RIGHT))
+	if (Keyboard::checkKeyDown(VK_RIGHT))
 	{
 		m_yaw += angleStep;
 	}
-	else if (Keyboard::checkKeyDown(VK_UP))
+	if (Keyboard::checkKeyDown(VK_UP))
 	{
 		m_pitch += angleStep;
 	}
-	else if (Keyboard::checkKeyDown(VK_DOWN))
+	if (Keyboard::checkKeyDown(VK_DOWN))
 	{
 		m_pitch -= angleStep;
 	}
@@ -171,7 +171,7 @@ void Camera::setViewMatrix(GLuint program)
 void Camera::handleInput(int mouseMoveX, int mouseMoveY)
 {
 	m_yaw += mouseMoveX * (m_lookSensitivity / 10);
-	m_pitch += mouseMoveY * (m_lookSensitivity / 10);
+	m_pitch -= mouseMoveY * (m_lookSensitivity / 10);
 	computeDirectionVector();
 	updateCameraPosition(0, 0);
 	computeViewMatrixUsingLookAt();

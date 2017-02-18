@@ -38,6 +38,7 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    Options(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    Menu(HWND, UINT, WPARAM, LPARAM);
 void CALLBACK		GetTimerEvent(UINT IDEvent, UINT reserved, DWORD dwUser, DWORD	dwReserved1, DWORD	dwReserved2);
 void DealWithKeyPress(HWND hWnd, WPARAM wParam, bool isKeydown);
 bool InitialiseMMTimer();
@@ -180,7 +181,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		break;
 	case WM_CREATE:
-
 		// here is where we create our open gl context
 		hdc = GetDC(hWnd);
 		GetClientRect(hWnd, &rect);
@@ -188,7 +188,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		// prepare vbo's and vao's and setup shader
 		game.PrepareToDraw();
-		SetCursorPos(rect.left + ((rect.right - rect.left) / 2), rect.top + ((rect.bottom - rect.top) / 2));
 		break;
 
 	case WM_PAINT:
@@ -230,8 +229,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
 	case WM_KEYDOWN:
+		// handle esc press
+		if (wParam == VK_ESCAPE)
+		{
+			DialogBox(hInst, MAKEINTRESOURCE(IDD_ESCMENU), hWnd, Menu);
+		}
 		Keyboard::setKeyDown(short(wParam));
-		//DealWithKeyPress(hWnd, wParam, true);
 		break;
 	case WM_MOUSEMOVE:
 		game.HandleMouse();
@@ -239,7 +242,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	
 	case WM_KEYUP:
 		Keyboard::setKeyUp(short(wParam));
-		//DealWithKeyPress(hWnd, wParam, false);
 		break;
 
     case WM_DESTROY:
@@ -271,6 +273,47 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     return (INT_PTR)FALSE;
 }
 
+// Message handler for menu box.
+INT_PTR CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDRESUME || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			POINT center;
+			center.x = rect.right / 2;
+			center.y = rect.bottom / 2;
+			ClientToScreen(hWnd, &center);
+			SetCursorPos(center.x, center.y);
+			return (INT_PTR)TRUE;
+		}
+		else if (LOWORD(wParam) == IDQUIT)
+		{
+			PostQuitMessage(0);
+		}
+
+		else if (LOWORD(wParam) == IDM_OPTIONS)
+		{
+			DialogBox(hInst, MAKEINTRESOURCE(IDD_OPTIONSBOX), hWnd, Options);
+		}
+		else if (LOWORD(wParam) == IDM_CONTROLS)
+		{
+			DialogBox(hInst, MAKEINTRESOURCE(IDD_CONTROLSBOX), hWnd, About);
+		}
+		else if (LOWORD(wParam) == IDM_ABOUT)
+		{
+			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
 INT_PTR CALLBACK Options(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(lParam);
@@ -280,11 +323,19 @@ INT_PTR CALLBACK Options(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		return (INT_PTR)TRUE;
 
 	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		if (LOWORD(wParam) == IDOK)
 		{
 			wchar_t Text[300] = { 0 };
 			GetWindowText(GetDlgItem(hDlg, IDC_EDIT1), Text, 300);
-			game.setSensitivity(stof(Text));
+			try {
+				game.setSensitivity(stof(Text));
+			}
+			catch(...){}
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		if (LOWORD(wParam) == IDCANCEL)
+		{
 			EndDialog(hDlg, LOWORD(wParam));
 			return (INT_PTR)TRUE;
 		}

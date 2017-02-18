@@ -25,7 +25,14 @@ void Game::CreateGLWindow(HDC hdc, RECT rect, HWND window)
 	//m_win32OpenGL.CreateShadersAndProgram("flatVerticesAsColours");
 	//m_win32OpenGL.CreateShadersAndProgram("diffuseOnly");
 	//m_win32OpenGL.CreateShadersAndProgram("texture");
+	RECT clientArea;
+	POINT windowCenter;
+	GetClientRect(m_window, &clientArea);
+	windowCenter.x = clientArea.right / 2;
+	windowCenter.y = clientArea.bottom / 2;
+	m_lastMousePos = windowCenter;
 
+	Mouse::setPosition(windowCenter, m_window);
 }
 
 void Game::DestroyGLWindow()
