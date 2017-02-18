@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Camera.h"
+#include "Keyboard.h"
 
 Camera::Camera()
 {
@@ -83,8 +84,72 @@ void Camera::computeDirectionVector()
 
 }
 
+void Camera::update()
+{
+	vec3 movementVector{ 0,0,0 };
+	float distanceMovedForward = 0.0f;
+	float distanceMovedRight = 0.0f;
+
+	float angleStep = 2.5f;
+
+	if (Keyboard::checkKeyDown(VK_LEFT))
+	{
+		m_yaw -= angleStep;
+	}
+	else if (Keyboard::checkKeyDown(VK_RIGHT))
+	{
+		m_yaw += angleStep;
+	}
+	else if (Keyboard::checkKeyDown(VK_UP))
+	{
+		m_pitch += angleStep;
+	}
+	else if (Keyboard::checkKeyDown(VK_DOWN))
+	{
+		m_pitch -= angleStep;
+	}
+	if (Keyboard::checkKeyDown('W'))
+	{
+		distanceMovedForward += 0.1f;
+	}
+	if (Keyboard::checkKeyDown('S'))
+	{
+		distanceMovedForward += -0.1f;
+	}
+	if (Keyboard::checkKeyDown('A'))
+	{
+		distanceMovedRight += -0.1;
+	}
+	if (Keyboard::checkKeyDown('D'))
+	{
+		distanceMovedRight += +0.1;
+	}
+	if (Keyboard::checkKeyDown(VK_SHIFT))
+	{
+		m_position.v[1] += 0.1;
+	}
+	if (Keyboard::checkKeyDown(VK_CONTROL))
+	{
+		m_position.v[1] -= 0.1;
+	}
+
+	// MORE KEY RESPONSES HERE
+	// move camera and update view matrix
+
+	computeDirectionVector();
+
+	updateCameraPosition(distanceMovedForward, distanceMovedRight);
+	computeViewMatrixUsingLookAt();
+}
+
 void Camera::updateCameraPosition(float distanceMovedForward, float distanceMovedRight)
 {
+	if (distanceMovedForward != 0 && distanceMovedRight != 0)
+	{ 
+		float magicNumber = 0.7071f;
+		distanceMovedForward *= magicNumber;
+		distanceMovedRight *= magicNumber;
+	}
 	// later might use matrices to calculate this....
 	// for now use angle in xz and stay on ground....
 	// if moved update position
@@ -102,69 +167,11 @@ void Camera::setViewMatrix(GLuint program)
 	Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
 }
 
-void Camera::handleInput(unsigned char keyCode)
-{
-	vec3 movementVector{0,0,0};
-	float distanceMovedForward = 0.0f;
-	float distanceMovedRight = 0.0f;
-
-	float angleStep = 2.5f;
-
-	if (keyCode == VK_LEFT)
-	{
-		m_yaw -= angleStep;
-	}
-	else if (keyCode == VK_RIGHT)
-	{
-		m_yaw += angleStep;
-	}
-	else if (keyCode == VK_UP)
-	{
-		m_pitch += angleStep;
-	}
-	else if (keyCode == VK_DOWN)
-	{
-		m_pitch -= angleStep;
-	}
-	else if (keyCode == 'W')
-	{
-		distanceMovedForward = 0.1f;
-	}
-	else if (keyCode == 'S')
-	{
-		distanceMovedForward = -0.1f;
-	}
-	else if (keyCode == 'A')
-	{
-		distanceMovedRight = -0.1;
-	}
-	else if (keyCode == 'D')
-	{
-		distanceMovedRight = +0.1;
-	}
-	else if (keyCode == VK_SHIFT)
-	{
-		m_position.v[1] += 0.1;
-	}
-	else if (keyCode == VK_CONTROL)
-	{
-		m_position.v[1] -= 0.1;
-	}
-
-	// MORE KEY RESPONSES HERE
-	// move camera and update view matrix
-
-	computeDirectionVector();
-
-	updateCameraPosition(distanceMovedForward, distanceMovedRight);
-	computeViewMatrixUsingLookAt();
-
-}
 
 void Camera::handleInput(int mouseMoveX, int mouseMoveY)
 {
-	m_yaw += mouseMoveX * (lookSensitivity / 10);
-	m_pitch += mouseMoveY * (lookSensitivity / 10);
+	m_yaw += mouseMoveX * (m_lookSensitivity / 10);
+	m_pitch += mouseMoveY * (m_lookSensitivity / 10);
 	computeDirectionVector();
 	updateCameraPosition(0, 0);
 	computeViewMatrixUsingLookAt();

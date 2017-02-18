@@ -14,7 +14,8 @@ public:
 	Camera();
 	~Camera();
 
-	float lookSensitivity = 1;
+	float m_lookSensitivity = 1;
+	float m_moveSpeed = 0.1;
 
 	const float startX = 0;
 	const float startY = 1.5f;
@@ -38,9 +39,9 @@ public:
 
 	void computeViewMatrixUsingLookAt();
 	void computeDirectionVector();
+	void update();
 	void updateCameraPosition(float distanceMovedForward, float distanceMovedRight);
 	void setViewMatrix(GLuint program);
-	void handleInput(unsigned char keyCode);
 	void handleInput(int mouseMoveX, int mouseMoveY);
 
 };

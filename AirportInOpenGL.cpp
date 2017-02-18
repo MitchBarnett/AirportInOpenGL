@@ -7,6 +7,7 @@
 #include "mmsystem.h"	// For game loop timer
 #include <tchar.h>
 #include "Game.h"
+#include "Keyboard.h"
 
 #define MAX_LOADSTRING 100
 // Message for requesting a new frame
@@ -175,6 +176,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
 	case WM_GAMEFRAME:
+		game.Update();
 		RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		break;
 	case WM_CREATE:
@@ -228,14 +230,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
 	case WM_KEYDOWN:
-		DealWithKeyPress(hWnd, wParam, true);
+		Keyboard::setKeyDown(short(wParam));
+		//DealWithKeyPress(hWnd, wParam, true);
 		break;
 	case WM_MOUSEMOVE:
 		game.HandleMouse();
 		break;
 	
 	case WM_KEYUP:
-		DealWithKeyPress(hWnd, wParam, false);
+		Keyboard::setKeyUp(short(wParam));
+		//DealWithKeyPress(hWnd, wParam, false);
 		break;
 
     case WM_DESTROY:
@@ -395,7 +399,7 @@ void	DealMouseMove(HWND hWnd, WPARAM wParam)
 	
 }
 
-bool IsKeyPressed(unsigned char keyCode)
+static bool IsKeyPressed(unsigned char keyCode)
 {
 	// we could test keys state here...
 	// keyCode is in 0-0xFF  - see ms VK_ codes.

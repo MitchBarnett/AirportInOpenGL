@@ -81,6 +81,9 @@ void Game::Draw()
 
 void Game::Update()
 {
+	m_MainCamera.update();
+	GLuint program = m_win32OpenGL.GetShaderProgram();
+	m_MainCamera.setViewMatrix(program);
 	// we tumble the cube to see all the faces.
 }
 void Game::HandleMouse()
@@ -113,9 +116,9 @@ void Game::HandleMouse()
 void Game::HandleInput(unsigned char virtualKeyCode)
 {
 	// add code for interaction here
-	m_MainCamera.handleInput(virtualKeyCode);
-	GLuint program = m_win32OpenGL.GetShaderProgram();
-	m_MainCamera.setViewMatrix(program);
+	//m_MainCamera.handleInput(virtualKeyCode);
+	//GLuint program = m_win32OpenGL.GetShaderProgram();
+	//m_MainCamera.setViewMatrix(program);
 
 	/*if (virtualKeyCode == VK_UP)
 	{
@@ -211,7 +214,7 @@ void Game::HandleInput(unsigned char virtualKeyCode)
 
 void Game::setSensitivity(float sensitivity)
 {
-	m_MainCamera.lookSensitivity = sensitivity;
+	m_MainCamera.m_lookSensitivity = sensitivity;
 }
 
 void Game::Resize(HDC hdc, RECT rect)
