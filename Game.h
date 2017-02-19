@@ -42,13 +42,11 @@ public:
 	void Update();
 
 	void HandleMouse();
-	void HandleInput(unsigned char virtualKeyCode);
 	void setSensitivity(float sensitivity);
 
 	void Resize(HDC hdc, RECT rect);
 
 	void ComputeProjectionMatrix();
 
-	bool SimpleLoadTexture(string fileName, char* imageData);
 };
 

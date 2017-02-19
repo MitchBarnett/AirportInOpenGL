@@ -70,7 +70,7 @@ void Game::PrepareToDraw()
 	//m_models.push_back(new Model("Models\\laptop.obj", "Textures\\laptop.bddd6mp", vec3{ 1,0.5,0 }));
 	m_models.push_back(new Model("Models\\wood.obj", "Textures\\WoodTexture3.bmp", vec3{ -2,-1,0 }));
 	m_models.push_back(new Model("Models\\oildrum.obj", "Textures\\oildrum.bmp", vec3{ -3,-1,0 }));
-	m_models.push_back(new Model("Models\\groundPlane.obj", "Textures\\grass.bmp", vec3{ -1,-1,0 }));
+	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass.bmp", vec3{ 0,-1,0 }));
 }
 
 void Game::Draw()
@@ -120,105 +120,6 @@ void Game::HandleMouse()
 	m_MainCamera.setViewMatrix(program);
 }
 
-void Game::HandleInput(unsigned char virtualKeyCode)
-{
-	// add code for interaction here
-	//m_MainCamera.handleInput(virtualKeyCode);
-	//GLuint program = m_win32OpenGL.GetShaderProgram();
-	//m_MainCamera.setViewMatrix(program);
-
-	/*if (virtualKeyCode == VK_UP)
-	{
-
-		m_cameraY += 0.1f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
-	}
-	else if (virtualKeyCode == VK_DOWN)
-	{
-		m_cameraY -= 0.1f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
-	}
-
-	else if (virtualKeyCode == VK_LEFT)
-	{
-		m_cameraX -= 0.1f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
-	}
-	else if (virtualKeyCode == VK_RIGHT)
-	{
-		m_cameraX += 0.1f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
-	}
-	else if (virtualKeyCode == VK_OEM_PLUS)
-	{
-		m_cameraZ -= 0.1f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
-	}
-	else if (virtualKeyCode == VK_OEM_MINUS)
-	{
-		m_cameraZ += 0.1f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformMatrixToShader(program, m_viewMatrix.m, "view_matrix");
-	}
-	else if (virtualKeyCode == VK_NUMPAD4)
-	{
-		m_lightPosition.v[0] = -50.f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
-	}
-	else if (virtualKeyCode == VK_NUMPAD6)
-	{
-		m_lightPosition.v[0] = 50.0f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
-	}
-	else if (virtualKeyCode == VK_NUMPAD8)
-	{
-		m_lightPosition.v[1] = 50.0f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
-	}
-	else if (virtualKeyCode == VK_NUMPAD2)
-	{
-		m_lightPosition.v[1] = -50.0f;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
-	}
-
-	else if (virtualKeyCode == VK_NUMPAD5)
-	{
-		m_lightPosition.v[0] = 0;
-		m_lightPosition.v[1] = 0;
-		ComputeViewMatrix();
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformVector3ToShader(program, m_lightPosition.v, "light_position_world");
-	}
-
-	else if (virtualKeyCode == VK_SPACE)
-	{
-		m_currentLight++;
-		m_lightColourDiffuse = m_lightColours[m_currentLight % 4];
-		GLuint program = m_win32OpenGL.GetShaderProgram();
-		Win32OpenGL::SendUniformVector3ToShader(program, m_lightColourDiffuse.v, "light_colour_diffuse");
-
-	}*/
-}
-
 void Game::setSensitivity(float sensitivity)
 {
 	m_MainCamera.m_lookSensitivity = sensitivity;
@@ -264,24 +165,3 @@ void Game::ComputeProjectionMatrix()
 	}
 }
 
-
-bool Game::SimpleLoadTexture(string fileName, char* imageData)
-{
-	// we will replace this with code to read a BMP file and analyse the header in the next lab
-	// for now we ASSUME a 256x256 pixel array of RGB data as unsigned bytes
-
-	ifstream texFile;
-	// important to ensure file is treated as binary data
-	// char(28) is a file separator char
-	// read in first texture
-	texFile.open(fileName, ios::binary);
-	if (!texFile)
-	{
-		cout << "error opening texture: " << fileName << endl;
-		return false;
-	}
-
-	texFile.read(imageData, 256 * 256 * 3);
-	texFile.close();
-	return true;
-}
