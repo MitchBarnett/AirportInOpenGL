@@ -30,7 +30,11 @@ void main() {
 	
 	// for the normal we only want the rotations, not translations so we use a vec4 with w term == 0
 	
-	normal_eye = vec3 (view_matrix * model_matrix * vec4 (vertex_normal, 0.0));   // ignore w term!!! - rotations only!!!
+	mat4 normalMatrix = transpose(inverse(view_matrix * model_matrix));
+	
+	normal_eye = normalize(vec3 (normalMatrix * vec4 (vertex_normal, 0.0)));
+	
+	//vec3 (view_matrix * model_matrix * vec4 (vertex_normal, 0.0));   // ignore w term!!! - rotations only!!!
 	position_eye = vec3 (view_matrix * model_matrix * vec4 (vertex_position, 1.0));  // eye at 0,0,0 in eye coords... this will vary for fragment!!
 	
 	// this is the standard calculation of the vertex position

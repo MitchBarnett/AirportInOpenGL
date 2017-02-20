@@ -54,43 +54,63 @@ void Game::PrepareToDraw()
 	// triangle
 
 	// send the matrixes to the shader
-	GLuint program = m_win32OpenGL.GetShaderProgram();
-	Win32OpenGL::SendUniformMatrixToShader(program, m_projectionMatrix.m, "projection_matrix");
-	m_MainCamera.setViewMatrix(program);
+	//GLuint program = m_win32OpenGL.GetShaderProgram();
+	Win32OpenGL::CreateShadersAndProgram("PhongTexture", m_phongVert, m_phongFrag, m_phongProgram);
+	Win32OpenGL::SendUniformMatrixToShader(m_phongProgram, m_projectionMatrix.m, "projection_matrix");
+	m_MainCamera.setViewMatrix(m_phongProgram);
+	m_mainLight.sendToShader(m_phongProgram);
 
-	m_mainLight.sendToShader(program);
+	Win32OpenGL::CreateShadersAndProgram("texture", m_unlitVert, m_unlitFrag, m_unlitProgram);
+	Win32OpenGL::SendUniformMatrixToShader(m_unlitProgram, m_projectionMatrix.m, "projection_matrix");
+	m_MainCamera.setViewMatrix(m_unlitProgram);
+	m_mainLight.sendToShader(m_unlitProgram);
+	
 
 	// now load in the model as with lighting
 
 
-	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp", vec3{ -1,-1,0 }));
-	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp", vec3{ 0,-0.5,0 }));
-	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp", vec3{ 1, 0, 0 }));
-	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp", vec3{ 2,0.5,0 }));
-	//m_models.push_back(new Model("Models\\laptop.obj", "Textures\\laptop.bddd6mp", vec3{ 1,0.5,0 }));
-	m_models.push_back(new Model("Models\\wood.obj", "Textures\\WoodTexture3.bmp", vec3{ -2,-1,0 }));
-	m_models.push_back(new Model("Models\\oildrum.obj", "Textures\\oildrum.bmp", vec3{ -3,-1,0 }));
-	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass.bmp", vec3{ 0,-1,0 }));
+	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp"));
+	m_models.push_back(new Model("Models\\wood.obj", "Textures\\WoodTexture3.bmp"));
+	m_models.push_back(new Model("Models\\oildrum.obj", "Textures\\oildrum.bmp"));
+	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass.bmp"));
+	m_models.push_back(new Model("Models\\cube.obj", "Textures\\sky.bmp"));
+
+	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 1,1,1 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[0], vec3{ -1,-1,-1 }, vec3{ 20,20,20 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 3,3,3 }, vec3{ 0,0,0 }, vec3{ 2,2,2 }));
+	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 2,0,0 }, vec3{ 0,40,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 2,0,0 }, vec3{ 0,80,0 }, vec3{ 0.5,0.5,0.5 }));
+	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 1,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[1], vec3{ -1,0,2 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[1], vec3{ -3,0,-2 }, vec3{ 0,0,0 }, vec3{ 2,2,2 }));
+	m_objects.push_back(new ModelInstance(m_models[3], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[4], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
 }
 
 void Game::Draw()
 {
 	m_win32OpenGL.ClearGLDisplay();
-	GLuint program = m_win32OpenGL.GetShaderProgram();
+	Win32OpenGL::UseProgram(m_phongProgram);
+	//GLuint program = m_win32OpenGL.GetShaderProgram();
 
-	for (int i = 0; i < m_models.size(); i++)
+	for (int i = 0; i < m_objects.size()-2; i++)
 	{
-		m_models[i]->draw(program);
+		m_objects[i]->draw(m_phongProgram);
 	}
-
+	Win32OpenGL::UseProgram(m_unlitProgram);
+	m_objects[m_objects.size() - 2]->draw(m_unlitProgram);
+	m_objects[m_objects.size() - 1]->draw(m_unlitProgram);
 	m_win32OpenGL.FinishedDrawing();
 }
 
 void Game::Update()
 {
+	
 	m_MainCamera.update();
-	GLuint program = m_win32OpenGL.GetShaderProgram();
-	m_MainCamera.setViewMatrix(program);
+	m_objects[m_objects.size()-1]->setPosition(m_MainCamera.m_position);
+	m_MainCamera.setViewMatrix(m_phongProgram);
+	m_MainCamera.setViewMatrix(m_unlitProgram);
 	// we tumble the cube to see all the faces.
 }
 void Game::HandleMouse()
@@ -116,8 +136,8 @@ void Game::HandleMouse()
 		Mouse::setPosition(windowCenter, m_window);
 	}
 	m_MainCamera.handleInput(difference.x, difference.y);
-	GLuint program = m_win32OpenGL.GetShaderProgram();
-	m_MainCamera.setViewMatrix(program);
+	m_MainCamera.setViewMatrix(m_phongProgram);
+	m_MainCamera.setViewMatrix(m_unlitProgram);
 }
 
 void Game::setSensitivity(float sensitivity)

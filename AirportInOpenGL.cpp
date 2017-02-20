@@ -416,34 +416,6 @@ void CALLBACK GetTimerEvent(UINT IDEvent, UINT reserved, DWORD dwUser,			//we st
 	PostMessage((HWND)dwUser, WM_GAMEFRAME, 0, 0);
 }
 
-void	DealWithKeyPress(HWND hWnd, WPARAM wParam, bool isKeydown)
-{
-	// see https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-	//
-	// for the VK_ codes defined in windows.h
-	// trap escape to exit program
-	if (isKeydown && wParam == VK_ESCAPE)
-	{
-		PostMessage(hWnd, WM_CLOSE, 0, 0);
-	}
-
-	// deal with other keys here
-	// we start 256 bits (32 unsigned chars) each holding 1 == pressed 0 == not
-	int keyByte = (wParam & 0xF8) >> 3;
-	unsigned char keyMask = masks[(wParam & 0x07)];
-	if (isKeydown)
-	{
-		// set the relevant bit
-		keyState[keyByte] |= keyMask;
-		// pass the keypress to the example object
-		game.HandleInput(wParam);
-	}
-	else
-	{
-		// clear the bit
-		keyState[keyByte] &= (~keyMask);
-	}
-}
 
 void	DealMouseMove(HWND hWnd, WPARAM wParam)
 {

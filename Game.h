@@ -1,12 +1,12 @@
 #pragma once
 #include "Win32OpenGL.h"
-#include "resource.h"
 #include "Log.h"
 #include "Model.h"
+#include "ModelInstance.h"
 #include "Camera.h"
 #include "Light.h"
 #include <Windows.h>
-//#include "Light.h"
+#include <gl\GL.h>
 
 class Game
 {
@@ -27,7 +27,17 @@ class Game
 	Camera m_MainCamera;
 	Light m_mainLight{ vec3{ 0.0f, 5.0f, 5.0f } };
 
+	GLuint m_phongProgram;
+	GLuint m_phongVert;
+	GLuint m_phongFrag;
+
+	GLuint m_unlitProgram;
+	GLuint m_unlitVert;
+	GLuint m_unlitFrag;
+
+
 	vector<Model*> m_models;
+	vector<ModelInstance*> m_objects;
 
 public:
 	Game();
