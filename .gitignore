@@ -335,3 +335,4 @@ __pycache__/
 
 logfile.txt
 AirportInOpenGL.vcxproj.filters
+!Models/*.obj
