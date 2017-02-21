@@ -73,7 +73,7 @@ void Game::PrepareToDraw()
 	m_models.push_back(new Model("Models\\wood.obj", "Textures\\WoodTexture3.bmp"));
 	m_models.push_back(new Model("Models\\oildrum.obj", "Textures\\oildrum.bmp"));
 	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass.bmp"));
-	m_models.push_back(new Model("Models\\cube.obj", "Textures\\sky.bmp"));
+	m_models.push_back(new Model("Models\\cube.obj", "Textures\\skybox.bmp"));
 
 	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
 	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 1,1,1 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
@@ -84,7 +84,7 @@ void Game::PrepareToDraw()
 	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 1,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
 	m_objects.push_back(new ModelInstance(m_models[1], vec3{ -1,0,2 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
 	m_objects.push_back(new ModelInstance(m_models[1], vec3{ -3,0,-2 }, vec3{ 0,0,0 }, vec3{ 2,2,2 }));
-	m_objects.push_back(new ModelInstance(m_models[3], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[3], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 10,1,10 }));
 	m_objects.push_back(new ModelInstance(m_models[4], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
 }
 
@@ -152,8 +152,8 @@ void Game::Resize(HDC hdc, RECT rect)
 	m_win32OpenGL.Reshape(hdc, rect.right, rect.bottom);
 	m_aspectRatio = (float)rect.right / rect.bottom;
 	ComputeProjectionMatrix();
-	GLuint program = m_win32OpenGL.GetShaderProgram();
-	Win32OpenGL::SendUniformMatrixToShader(program, m_projectionMatrix.m, "projection_matrix");
+	Win32OpenGL::SendUniformMatrixToShader(m_phongProgram, m_projectionMatrix.m, "projection_matrix");
+	Win32OpenGL::SendUniformMatrixToShader(m_unlitProgram, m_projectionMatrix.m, "projection_matrix");
 }
 
 void Game::ComputeProjectionMatrix()
