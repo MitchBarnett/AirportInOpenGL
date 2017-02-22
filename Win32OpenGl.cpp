@@ -117,12 +117,14 @@ void Win32OpenGL::Reshape(HDC hdc, int w, int h)
 //non static version - use if no shader manager
 void Win32OpenGL::CreateShadersAndProgram(string baseName)
 {
-	Win32OpenGL::CreateShadersAndProgram(baseName, m_vertexShader, m_fragmentShader, m_program);
+	Win32OpenGL::CreateShadersAndProgram(baseName, m_program);
 }
 
 // static version
-void Win32OpenGL::CreateShadersAndProgram(string baseName, GLuint& vertexShader, GLuint& fragmentShader, GLuint& program)
+void Win32OpenGL::CreateShadersAndProgram(string baseName, GLuint& program)
 {
+	GLuint vertexShader;
+	GLuint fragmentShader;
 	string vertexShaderName = "Shaders\\";
 	vertexShaderName += baseName;
 	vertexShaderName += ".vert";

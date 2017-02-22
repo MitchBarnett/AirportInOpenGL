@@ -27,13 +27,9 @@ class Game
 	Camera m_MainCamera;
 	Light m_mainLight{ vec3{ 0.0f, 5.0f, 5.0f } };
 
-	GLuint m_phongProgram;
-	GLuint m_phongVert;
-	GLuint m_phongFrag;
+	GLuint m_phongShader;
+	GLuint m_unlitShader;
 
-	GLuint m_unlitProgram;
-	GLuint m_unlitVert;
-	GLuint m_unlitFrag;
 
 
 	vector<Model*> m_models;

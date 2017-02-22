@@ -154,6 +154,7 @@ void Camera::updateCameraPosition(float distanceMovedForward, float distanceMove
 	// for now use angle in xz and stay on ground....
 	// if moved update position
 	vec3 right = cross(m_forward, m_up);
+	right = normalise(right);
 	m_position += m_forward * distanceMovedForward;
 	m_position += right * distanceMovedRight;
 	/*m_position.v[0] += distanceMoved * m_directionX;
@@ -170,8 +171,13 @@ void Camera::setViewMatrix(GLuint program)
 
 void Camera::handleInput(int mouseMoveX, int mouseMoveY)
 {
-	m_yaw += mouseMoveX * (m_lookSensitivity / 10);
-	m_pitch -= mouseMoveY * (m_lookSensitivity / 10);
+	float yawChange = mouseMoveX * (m_lookSensitivity / 10);
+	float pitchChange = -mouseMoveY * (m_lookSensitivity / 10);
+	m_yaw += yawChange;
+	if (m_pitch + pitchChange > -90 && m_pitch + pitchChange < 90)
+	{
+		m_pitch += pitchChange;
+	}
 	computeDirectionVector();
 	updateCameraPosition(0, 0);
 	computeViewMatrixUsingLookAt();

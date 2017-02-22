@@ -46,7 +46,7 @@ public:
 	void CreateShadersAndProgram(string baseName);
 
 	// static version can be called by shader manager
-	static void Win32OpenGL::CreateShadersAndProgram(string baseName, GLuint& vertexShader, GLuint& fragmentShader, GLuint& program);
+	static void Win32OpenGL::CreateShadersAndProgram(string baseName, GLuint& program);
 	static void Win32OpenGL::UseProgram(GLuint program);
 
 	void Reshape(HDC hdc, int w, int h);	// Changing viewport

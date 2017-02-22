@@ -20,11 +20,7 @@ void Game::CreateGLWindow(HDC hdc, RECT rect, HWND window)
 	m_win32OpenGL.CreateGLContext(hdc);	// may throw an exception!!!
 										// MessageBoxA(0, (char*)glGetString(GL_VERSION), "OPENGL VERSION", 0);
 	m_aspectRatio = static_cast<float>(rect.right / rect.bottom);
-	m_win32OpenGL.CreateShadersAndProgram("PhongTexture");
-	//m_win32OpenGL.CreateShadersAndProgram("phong");
-	//m_win32OpenGL.CreateShadersAndProgram("flatVerticesAsColours");
-	//m_win32OpenGL.CreateShadersAndProgram("diffuseOnly");
-	//m_win32OpenGL.CreateShadersAndProgram("texture");
+
 	RECT clientArea;
 	POINT windowCenter;
 	GetClientRect(m_window, &clientArea);
@@ -55,15 +51,17 @@ void Game::PrepareToDraw()
 
 	// send the matrixes to the shader
 	//GLuint program = m_win32OpenGL.GetShaderProgram();
-	Win32OpenGL::CreateShadersAndProgram("PhongTexture", m_phongVert, m_phongFrag, m_phongProgram);
-	Win32OpenGL::SendUniformMatrixToShader(m_phongProgram, m_projectionMatrix.m, "projection_matrix");
-	m_MainCamera.setViewMatrix(m_phongProgram);
-	m_mainLight.sendToShader(m_phongProgram);
+	GLuint a;
+	GLuint b;
+	Win32OpenGL::CreateShadersAndProgram("PhongTexture", m_phongShader);
+	Win32OpenGL::SendUniformMatrixToShader(m_phongShader, m_projectionMatrix.m, "projection_matrix");
+	m_MainCamera.setViewMatrix(m_phongShader);
+	m_mainLight.sendToShader(m_phongShader);
 
-	Win32OpenGL::CreateShadersAndProgram("texture", m_unlitVert, m_unlitFrag, m_unlitProgram);
-	Win32OpenGL::SendUniformMatrixToShader(m_unlitProgram, m_projectionMatrix.m, "projection_matrix");
-	m_MainCamera.setViewMatrix(m_unlitProgram);
-	m_mainLight.sendToShader(m_unlitProgram);
+	Win32OpenGL::CreateShadersAndProgram("texture", m_unlitShader);
+	Win32OpenGL::SendUniformMatrixToShader(m_unlitShader, m_projectionMatrix.m, "projection_matrix");
+	m_MainCamera.setViewMatrix(m_unlitShader);
+	m_mainLight.sendToShader(m_unlitShader);
 	
 
 	// now load in the model as with lighting
@@ -73,7 +71,7 @@ void Game::PrepareToDraw()
 	m_models.push_back(new Model("Models\\wood.obj", "Textures\\WoodTexture3.bmp"));
 	m_models.push_back(new Model("Models\\oildrum.obj", "Textures\\oildrum.bmp"));
 	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass.bmp"));
-	m_models.push_back(new Model("Models\\cube.obj", "Textures\\skybox.bmp"));
+	m_models.push_back(new Model("Models\\cube.obj", "Textures\\SkyBox2.bmp"));
 
 	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
 	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 1,1,1 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
@@ -91,16 +89,16 @@ void Game::PrepareToDraw()
 void Game::Draw()
 {
 	m_win32OpenGL.ClearGLDisplay();
-	Win32OpenGL::UseProgram(m_phongProgram);
+	Win32OpenGL::UseProgram(m_phongShader);
 	//GLuint program = m_win32OpenGL.GetShaderProgram();
 
 	for (int i = 0; i < m_objects.size()-2; i++)
 	{
-		m_objects[i]->draw(m_phongProgram);
+		m_objects[i]->draw(m_phongShader);
 	}
-	Win32OpenGL::UseProgram(m_unlitProgram);
-	m_objects[m_objects.size() - 2]->draw(m_unlitProgram);
-	m_objects[m_objects.size() - 1]->draw(m_unlitProgram);
+	Win32OpenGL::UseProgram(m_unlitShader);
+	m_objects[m_objects.size() - 2]->draw(m_unlitShader);
+	m_objects[m_objects.size() - 1]->draw(m_unlitShader);
 	m_win32OpenGL.FinishedDrawing();
 }
 
@@ -109,8 +107,8 @@ void Game::Update()
 	
 	m_MainCamera.update();
 	m_objects[m_objects.size()-1]->setPosition(m_MainCamera.m_position);
-	m_MainCamera.setViewMatrix(m_phongProgram);
-	m_MainCamera.setViewMatrix(m_unlitProgram);
+	m_MainCamera.setViewMatrix(m_phongShader);
+	m_MainCamera.setViewMatrix(m_unlitShader);
 	// we tumble the cube to see all the faces.
 }
 void Game::HandleMouse()
@@ -136,8 +134,8 @@ void Game::HandleMouse()
 		Mouse::setPosition(windowCenter, m_window);
 	}
 	m_MainCamera.handleInput(difference.x, difference.y);
-	m_MainCamera.setViewMatrix(m_phongProgram);
-	m_MainCamera.setViewMatrix(m_unlitProgram);
+	m_MainCamera.setViewMatrix(m_phongShader);
+	m_MainCamera.setViewMatrix(m_unlitShader);
 }
 
 void Game::setSensitivity(float sensitivity)
@@ -152,8 +150,8 @@ void Game::Resize(HDC hdc, RECT rect)
 	m_win32OpenGL.Reshape(hdc, rect.right, rect.bottom);
 	m_aspectRatio = (float)rect.right / rect.bottom;
 	ComputeProjectionMatrix();
-	Win32OpenGL::SendUniformMatrixToShader(m_phongProgram, m_projectionMatrix.m, "projection_matrix");
-	Win32OpenGL::SendUniformMatrixToShader(m_unlitProgram, m_projectionMatrix.m, "projection_matrix");
+	Win32OpenGL::SendUniformMatrixToShader(m_phongShader, m_projectionMatrix.m, "projection_matrix");
+	Win32OpenGL::SendUniformMatrixToShader(m_unlitShader, m_projectionMatrix.m, "projection_matrix");
 }
 
 void Game::ComputeProjectionMatrix()
