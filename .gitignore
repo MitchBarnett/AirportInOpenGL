@@ -334,5 +334,4 @@ __pycache__/
 # End of https://www.gitignore.io/api/c++,visualstudio,windows
 
 logfile.txt
-AirportInOpenGL.vcxproj.filters
-!Models/*.obj
+!AirportInOpenGl/Models/*.obj
