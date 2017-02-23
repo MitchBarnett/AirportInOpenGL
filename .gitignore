@@ -335,3 +335,4 @@ __pycache__/
 
 logfile.txt
 !AirportInOpenGl/Models/*.obj
+!AirportInOpenGl/lib/*.lib
