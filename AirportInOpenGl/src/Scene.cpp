@@ -13,8 +13,17 @@ void Scene::load()
 {
 	m_models.insert(std::pair<string, Model>("errModel", Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp")));
 	pugi::xml_document doc;
-	doc.load_file("Scenes//scene.xml");
+	pugi::xml_parse_result parseResult = doc.load_file("Scenes\\scene.xml");
 
+	if (parseResult)
+	{
+		Log::AppendToLogFile("Scenes\\scene.xml file was parsed without errors");
+	}
+	else
+	{
+		Log::AppendToLogFile("Scenes//scene.xml file failed to parse");
+		Log::AppendToLogFile("parsing error:" + string(parseResult.description()));
+	}
 	pugi::xml_node modelsTag = doc.child("scene").child("models");
 	// tag::basic[]
 	for (pugi::xml_node model = modelsTag.first_child(); model; model = model.next_sibling())
@@ -37,6 +46,7 @@ void Scene::load()
 		}
 		m_models.insert(std::pair<string,Model>(name, Model(objFile, textureFile)));
 	}
+	Log::AppendToLogFile(to_string(m_models.size()) + " Models loaded");
 
 	pugi::xml_node objectsTag = doc.child("scene").child("objects");
 	// tag::basic[]
@@ -50,9 +60,38 @@ void Scene::load()
 		{
 			model = &m_models[object.attribute("model").value()];
 		}
+		else
+		{
+			Log::AppendToLogFile("no model named: \"" + string(object.attribute("model").value()) + "\" found");
+		}
+		pugi::xml_node positionNode = object.child("position");
+		pugi::xml_node rotationNode = object.child("rotation");
+		pugi::xml_node scaleNode = object.child("scale");
+
+		if (positionNode)
+		{
+			position.v[0] = stof(positionNode.attribute("x").value());
+			position.v[1] = stof(positionNode.attribute("y").value());
+			position.v[2] = stof(positionNode.attribute("z").value());
+		}
+
+		if (rotationNode)
+		{
+			rotation.v[0] = stof(rotationNode.attribute("x").value());
+			rotation.v[1] = stof(rotationNode.attribute("y").value());
+			rotation.v[2] = stof(rotationNode.attribute("z").value());
+		}
+		
+		if (scaleNode)
+		{
+			scale.v[0] = stof(scaleNode.attribute("x").value());
+			scale.v[1] = stof(scaleNode.attribute("y").value());
+			scale.v[2] = stof(scaleNode.attribute("z").value());
+		}
 
 		m_objects.push_back(ModelInstance(model, position, rotation, scale));
 	}
+	Log::AppendToLogFile(to_string(m_objects.size()) + " Objects loaded");
 }
 
 void Scene::draw(GLuint program)

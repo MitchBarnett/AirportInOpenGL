@@ -162,6 +162,7 @@
     <ClInclude Include="include\targetver.h" />
     <ClInclude Include="include\TextureLoader.h" />
     <ClInclude Include="include\Win32OpenGl.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="AirportInOpenGL.ico" />

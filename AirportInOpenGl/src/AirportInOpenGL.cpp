@@ -310,6 +310,10 @@ INT_PTR CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 		}
+		else if (LOWORD(wParam) == IDRELOAD)
+		{
+			game.PrepareToDraw();
+		}
 		break;
 	}
 	return (INT_PTR)FALSE;
