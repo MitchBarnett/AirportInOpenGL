@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "Log.h"
 #include "Mouse.h"
+#include "Scene.h"
 
 
 Game::Game()
@@ -39,6 +40,7 @@ void Game::DestroyGLWindow()
 
 void Game::PrepareToDraw()
 {
+	Scene scene;
 	m_lightColours.push_back(vec3{ 1.0f, 0.0f, 0.0f });
 	m_lightColours.push_back(vec3{ 0.0f, 1.0f, 0.0f });
 	m_lightColours.push_back(vec3{ 0.0f, 0.0f, 1.0f });

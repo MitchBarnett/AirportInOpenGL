@@ -24,12 +24,6 @@
     <ClInclude Include="include\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\glew.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,10 +60,10 @@
     <ClInclude Include="include\TextureLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\wglew.h">
+    <ClInclude Include="include\Win32OpenGl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Win32OpenGl.h">
+    <ClInclude Include="include\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -127,6 +121,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Win32OpenGl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pugixml.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -148,8 +148,6 @@
     <ClInclude Include="include\AirportInOpenGL.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Game.h" />
-    <ClInclude Include="include\glew.h" />
-    <ClInclude Include="include\json.hpp" />
     <ClInclude Include="include\Keyboard.h" />
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\Log.h" />
@@ -159,10 +157,10 @@
     <ClInclude Include="include\ModelLoader.h" />
     <ClInclude Include="include\Mouse.h" />
     <ClInclude Include="include\Resource.h" />
+    <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\targetver.h" />
     <ClInclude Include="include\TextureLoader.h" />
-    <ClInclude Include="include\wglew.h" />
     <ClInclude Include="include\Win32OpenGl.h" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +182,10 @@
     <ClCompile Include="src\ModelInstance.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
     <ClCompile Include="src\Mouse.cpp" />
+    <ClCompile Include="src\pugixml.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
