@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<scene>
+    <models>
+      <model name="oildrum" objfile="Models\oildrum.obj" texturefile="Textures\oildrum.bmp"/>
+    </models>
+</scene>
