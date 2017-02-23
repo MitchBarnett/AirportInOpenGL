@@ -1,14 +1,17 @@
 #pragma once
 #include <vector>
-#include "Model.h"
+#include <map>
+#include "ModelInstance.h"
+#
 class Scene
 {
 public:
 	Scene();
 	void load();
 	void update();
-	void draw();
+	void draw(GLuint program);
 private:
-	std::vector<Model*> m_models;
+	map<string, Model> m_models;
+	vector<ModelInstance> m_objects;
 };
 
