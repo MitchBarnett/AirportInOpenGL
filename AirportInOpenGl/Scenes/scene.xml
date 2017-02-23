@@ -1,10 +1,29 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <scene>
     <models>
-      <model name="oildrum" objfile="Models\oildrum.obj" texturefile="Textures\oildrum.bmp"/>
+      <model name="oildrum" objfile="Models\oildrum.obj" texturefile="Textures\oildrum.bmp" />
+      <model name="cube" objfile="Models\\simpleCubeWithTextures2.obj" texturefile="Textures\\redBrick256x256.bmp" />
+      <model name="logPile" objfile="Models\\wood.obj" texturefile="Textures\\WoodTexture3.bmp" />
     </models>
     <objects>
-      <model model="oildrum"/>
-      <model model="nonExistant"/>
+      <object model="cube" />
+      <object model="cube">
+        <position x="2" y="2" z="2" />
+        <scale x="2" y="2" z="2" />
+      </object>
+      <object model="cube">
+        <position x="4" y="4" z="0" />
+        <scale x="3" y="3" z="3" />
+      </object>
+      <object model="oildrum">
+        <position x="0" y="0" z="2" />
+        <rotation x="21" y="20" z="45" />
+        <scale x="1" y="2" z="1" />
+      </object>
+      <object model="oildrum">
+        <position x="2" y="0" z="2" />
+        <rotation x="21" y="20" z="45" />
+        <scale x="1" y="2" z="1" />
+      </object>
+
     </objects>
 </scene>
