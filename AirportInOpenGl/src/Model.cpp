@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Model.h"
 
+Model::Model()
+{
+}
+
 Model::Model(string modelLocation, string textrueLocation)
 {
 	if (!m_modelLoader.genModel(modelLocation))

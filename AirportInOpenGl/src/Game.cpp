@@ -40,7 +40,7 @@ void Game::DestroyGLWindow()
 
 void Game::PrepareToDraw()
 {
-	Scene scene;
+	m_scene = new Scene();
 	m_lightColours.push_back(vec3{ 1.0f, 0.0f, 0.0f });
 	m_lightColours.push_back(vec3{ 0.0f, 1.0f, 0.0f });
 	m_lightColours.push_back(vec3{ 0.0f, 0.0f, 1.0f });
@@ -94,10 +94,7 @@ void Game::Draw()
 	Win32OpenGL::UseProgram(m_phongShader);
 	//GLuint program = m_win32OpenGL.GetShaderProgram();
 
-	for (int i = 0; i < m_objects.size()-2; i++)
-	{
-		m_objects[i]->draw(m_phongShader);
-	}
+	m_scene->draw(m_phongShader);
 	Win32OpenGL::UseProgram(m_unlitShader);
 	m_objects[m_objects.size() - 2]->draw(m_unlitShader);
 	m_objects[m_objects.size() - 1]->draw(m_unlitShader);

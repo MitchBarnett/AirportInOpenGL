@@ -7,6 +7,7 @@
 class Model
 {
 public:
+	Model();
 	Model(string modelLoacation, string textrueLocation);
 	void setPosition(vec3 position);
 	void update();

@@ -3,4 +3,8 @@
     <models>
       <model name="oildrum" objfile="Models\oildrum.obj" texturefile="Textures\oildrum.bmp"/>
     </models>
+    <objects>
+      <model model="oildrum"/>
+      <model model="nonExistant"/>
+    </objects>
 </scene>

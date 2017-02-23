@@ -7,6 +7,7 @@
 #include "Light.h"
 #include <Windows.h>
 #include <gl\GL.h>
+#include "Scene.h"
 
 class Game
 {
@@ -30,7 +31,7 @@ class Game
 	GLuint m_phongShader;
 	GLuint m_unlitShader;
 
-
+	Scene*	m_scene;
 
 	vector<Model*> m_models;
 	vector<ModelInstance*> m_objects;
