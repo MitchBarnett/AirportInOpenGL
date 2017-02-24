@@ -44,6 +44,7 @@ public:
 	void DestroyGLWindow();
 
 	void PrepareToDraw();
+	void reloadScene();
 	void Draw();
 
 	void Update();
