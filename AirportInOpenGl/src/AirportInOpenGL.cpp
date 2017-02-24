@@ -312,7 +312,15 @@ INT_PTR CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		else if (LOWORD(wParam) == IDRELOAD)
 		{
-			game.PrepareToDraw();
+			game.reloadScene();
+			EndDialog(hDlg, LOWORD(wParam));
+			POINT center;
+			center.x = rect.right / 2;
+			center.y = rect.bottom / 2;
+			ClientToScreen(hWnd, &center);
+			SetCursorPos(center.x, center.y);
+			RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+			return (INT_PTR)TRUE;
 		}
 		break;
 	}

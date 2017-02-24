@@ -40,7 +40,7 @@ void Game::DestroyGLWindow()
 
 void Game::PrepareToDraw()
 {
-	m_scene = new Scene();
+	
 	m_lightColours.push_back(vec3{ 1.0f, 0.0f, 0.0f });
 	m_lightColours.push_back(vec3{ 0.0f, 1.0f, 0.0f });
 	m_lightColours.push_back(vec3{ 0.0f, 0.0f, 1.0f });
@@ -68,24 +68,17 @@ void Game::PrepareToDraw()
 
 	// now load in the model as with lighting
 
-
-	m_models.push_back(new Model("Models\\simpleCubeWithTextures2.obj", "Textures\\redBrick256x256.bmp"));
-	m_models.push_back(new Model("Models\\wood.obj", "Textures\\WoodTexture3.bmp"));
-	m_models.push_back(new Model("Models\\oildrum.obj", "Textures\\oildrum.bmp"));
+	m_scene = new Scene();
 	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass.bmp"));
 	m_models.push_back(new Model("Models\\cube.obj", "Textures\\SkyBox2.bmp"));
 
-	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
-	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 1,1,1 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
-	m_objects.push_back(new ModelInstance(m_models[0], vec3{ -1,-1,-1 }, vec3{ 20,20,20 }, vec3{ 1,1,1 }));
-	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 3,3,3 }, vec3{ 0,0,0 }, vec3{ 2,2,2 }));
-	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 2,0,0 }, vec3{ 0,40,0 }, vec3{ 1,1,1 }));
-	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 2,0,0 }, vec3{ 0,80,0 }, vec3{ 0.5,0.5,0.5 }));
-	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 1,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
-	m_objects.push_back(new ModelInstance(m_models[1], vec3{ -1,0,2 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
-	m_objects.push_back(new ModelInstance(m_models[1], vec3{ -3,0,-2 }, vec3{ 0,0,0 }, vec3{ 2,2,2 }));
-	m_objects.push_back(new ModelInstance(m_models[3], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 10,1,10 }));
-	m_objects.push_back(new ModelInstance(m_models[4], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 10,1,10 }));
+	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+}
+
+void Game::reloadScene()
+{
+	m_scene->load();
 }
 
 void Game::Draw()
