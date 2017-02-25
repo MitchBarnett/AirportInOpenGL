@@ -51,6 +51,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
+	Log::AppendToLogFileWithDate("====== Game started ======");
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -246,6 +247,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_DESTROY:
         PostQuitMessage(0);
+		Log::AppendToLogFileWithDate("====== Game exited ======\n\n");
         break;
 	default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -296,6 +298,7 @@ INT_PTR CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		else if (LOWORD(wParam) == IDQUIT)
 		{
 			PostQuitMessage(0);
+			Log::AppendToLogFileWithDate("====== Game exited ======\n\n");
 		}
 
 		else if (LOWORD(wParam) == IDM_OPTIONS)
