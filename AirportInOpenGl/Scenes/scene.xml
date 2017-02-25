@@ -1,21 +1,22 @@
 <scene>
-    <models>
-      <model name="oildrum" objfile="Models\oildrum.obj" texturefile="Textures\oildrum.bmp" />
-      <model name="cube" objfile="Models\\simpleCubeWithTextures2.obj" texturefile="Textures\\redBrick256x256.bmp" />
-      <model name="logPile" objfile="Models\\wood.obj" texturefile="Textures\\WoodTexture3.bmp" />
-    </models>
-    <objects>
-      <object model="oildrum" />
-      <object model="logPile">
-        <position x="1"/>
-      </object>
-      <object model="oildrum">
-        <position x="-1"/>
-        <rotation yaw="90"/>
-      </object>
-      <object model="logPile">
-        <position x="-2"/>
-        <rotation yaw="90" roll="90"/>
-      </object>
-    </objects>
+  <models>
+    <model name="oildrum" objfile="Models\oildrum.obj" texturefile="Textures\oildrum.bmp" />
+    <model name="cube" objfile="Models\\simpleCubeWithTextures2.obj" texturefile="Textures\\redBrick256x256.bmp" />
+    <model name="logPile" objfile="Models\\wood.obj" texturefile="Textures\\WoodTexture3.bmp" />
+  </models>
+  <objects>
+    <object model="oildrum" />
+    <object model="logPile">
+      <position x="1"/>
+    </object>
+    <object model="oildrum">
+      <position x="-2"/>
+      <rotation yaw="90"/>
+      <scale x="2" y="3" z="2" />
+    </object>
+    <object model="cube">
+      <position x="2" z="2" y ="1"/>
+      <rotation yaw="45" pitch="45"/>
+    </object>
+  </objects>
 </scene>
