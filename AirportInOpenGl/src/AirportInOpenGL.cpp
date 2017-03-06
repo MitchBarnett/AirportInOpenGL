@@ -186,7 +186,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		hdc = GetDC(hWnd);
 		GetClientRect(hWnd, &rect);
 		game.CreateGLWindow(hdc, rect, hWnd);
-
 		// prepare vbo's and vao's and setup shader
 		game.PrepareToDraw();
 		break;
@@ -198,6 +197,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		game.Draw();
 		SwapBuffers(hdc);
 		EndPaint(hWnd, &ps);
+		if (!game.m_loaded)
+		{
+			game.loadScene();
+			game.m_loaded = true;
+
+		}
 	}
 	break;
 	case WM_SIZE:
@@ -315,14 +320,13 @@ INT_PTR CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		else if (LOWORD(wParam) == IDRELOAD)
 		{
-			game.reloadScene();
 			EndDialog(hDlg, LOWORD(wParam));
+			game.reloadScene();
 			POINT center;
 			center.x = rect.right / 2;
 			center.y = rect.bottom / 2;
 			ClientToScreen(hWnd, &center);
 			SetCursorPos(center.x, center.y);
-			RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 			return (INT_PTR)TRUE;
 		}
 		break;

@@ -423,7 +423,7 @@ void Win32OpenGL::CreateVAO(GLuint& vao, GLuint& vboVertices, vector<float>& ver
 
 void Win32OpenGL::SetupDisplay()
 {
-	glClearColor(0.1f, 0.1f, 0.2f, 0.0);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);

@@ -1,0 +1,10 @@
+<scene>
+    <models>
+      <model name="imagePane" objfile="Models\\imagePane.obj" texturefile="Textures\\loading.bmp" />
+    </models>
+    <objects>
+      <object model="imagePane">
+        <scale x="3" y="3"/>
+        <position y="1.5">
+    </objects>
+</scene>

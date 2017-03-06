@@ -25,11 +25,11 @@ int TextureLoader::LoadBMP(string location, GLuint &texture)  //const char* loca
 	unsigned char* datBuff[2] = { nullptr, nullptr }; // Header buffers
 	unsigned char* pixels = nullptr; // Pixels
 
-	// windows knows the relevant header structures
+									 // windows knows the relevant header structures
 	BITMAPFILEHEADER* bmpHeader = nullptr; // Header
 	BITMAPINFOHEADER* bmpInfo = nullptr; // Info
 
-	// The file... We open it with it's constructor
+										 // The file... We open it with it's constructor
 	std::ifstream file(location, std::ios::binary);
 	if (!file)
 	{
@@ -59,7 +59,8 @@ int TextureLoader::LoadBMP(string location, GLuint &texture)  //const char* loca
 
 	unsigned int imageSize = bmpInfo->biSizeImage;
 
-	if (imageSize == 0)
+
+	if ((imageSize == 0) || ((imageSize % 3) != 0))		// new code here!!! 23/2/17
 	{
 		imageSize = bmpInfo->biWidth * bmpInfo->biHeight * 3;
 	}
@@ -93,11 +94,11 @@ int TextureLoader::LoadBMP(string location, GLuint &texture)  //const char* loca
 
 	GLint mode = GL_RGB;                   // Set the mode
 
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+										   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+										   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	// Create the texture. We get the offsets from the image, then we use it with the image's
-	// pixel data to create it.
+										   // Create the texture. We get the offsets from the image, then we use it with the image's
+										   // pixel data to create it.
 	glTexImage2D(GL_TEXTURE_2D, 0, mode, w, h, 0, mode, GL_UNSIGNED_BYTE, pixels);
 
 	// 
@@ -128,4 +129,3 @@ int TextureLoader::LoadBMP(string location, GLuint &texture)  //const char* loca
 
 	return 0; // Return success code 	
 }
-

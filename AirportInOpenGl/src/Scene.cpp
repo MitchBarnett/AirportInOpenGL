@@ -6,10 +6,15 @@
 #include "Model.h"
 Scene::Scene()
 {
-	load();	// Load in the scene
+	load("Scenes\\scene.xml");	// Load in the scene
 }
 
-void Scene::load()
+Scene::Scene(string file)
+{
+	load(file);	// Load in the scene
+}
+
+void Scene::load(string file)
 {
 	Log::AppendToLogFile("==== Scene loading starting ====");
 	
@@ -22,15 +27,15 @@ void Scene::load()
 
 	// Parse the XML document into DOM format
 	pugi::xml_document doc;
-	pugi::xml_parse_result parseResult = doc.load_file("Scenes\\scene.xml");
+	pugi::xml_parse_result parseResult = doc.load_file(file.c_str());
 
 	if (parseResult)	// Parsed without errors
 	{
-		Log::AppendToLogFile("Scenes\\scene.xml file was parsed without errors");
+		Log::AppendToLogFile(file + " file was parsed without errors");
 	}
 	else // Parsed with errors
 	{
-		Log::AppendToLogFile("Scenes//scene.xml file failed to parse");
+		Log::AppendToLogFile(file +" file failed to parse");
 		Log::AppendToLogFile("parsing error:" + string(parseResult.description()));
 		Log::AppendToLogFile("Run through a XML validator");
 	}

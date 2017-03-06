@@ -32,6 +32,7 @@ class Game
 	GLuint m_unlitShader;
 
 	Scene*	m_scene;
+	
 
 	vector<Model*> m_models;
 	vector<ModelInstance*> m_objects;
@@ -39,11 +40,12 @@ class Game
 public:
 	Game();
 	~Game();
-
+	bool m_loaded = false;
 	void CreateGLWindow(HDC hdc, RECT rect, HWND window);
 	void DestroyGLWindow();
 
 	void PrepareToDraw();
+	void loadScene();
 	void reloadScene();
 	void Draw();
 

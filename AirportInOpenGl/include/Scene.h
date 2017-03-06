@@ -13,11 +13,18 @@ class Scene
 {
 public:
 	/*!
-	Default constructor, loads scene.xml
+	Default constructor, loads scene.xml.
 
-	Creates a scene by loading it in through XMl.
+	Creates a scene by loading it in through XML.
 	*/
 	Scene();
+
+	/*!
+	secondary constructor, loads a provided scene.
+
+	Creates a scene by loading it in through XML.
+	*/
+	Scene(string file);
 
 	/*!
 	Loads in a scene through XML.
@@ -27,7 +34,7 @@ public:
 	Creates objects from a given model name and position, rotation and scale
 	infomation. All atributes are optional for maxium flexibilty and ease of use.
 	*/
-	void load();
+	void load(string file);
 
 	/*!
 	Updates the scene (Not currently implemented).
@@ -40,7 +47,9 @@ public:
 	Runs through each object in the object vector and draws it.
 	*/
 	void draw(GLuint program);
+
 private:
+	string m_filename;
 	map<string, Model> m_models;  //!< Map of models has a unique name string as a key.
 	vector<ModelInstance> m_objects; //!< Vector of objects used to draw and update them.
 };

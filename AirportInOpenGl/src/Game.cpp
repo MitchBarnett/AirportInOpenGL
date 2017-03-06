@@ -65,32 +65,54 @@ void Game::PrepareToDraw()
 	m_MainCamera.setViewMatrix(m_unlitShader);
 	m_mainLight.sendToShader(m_unlitShader);
 	
+	Scene loading("Scenes\\loading.xml");
+	Win32OpenGL::UseProgram(m_unlitShader);
+	loading.draw(m_unlitShader);
+	m_win32OpenGL.FinishedDrawing();
+	RedrawWindow(m_window, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 
 	// now load in the model as with lighting
 
-	m_scene = new Scene();
+	m_scene = new Scene("Scenes\\loading.xml");
+
 	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass.bmp"));
 	m_models.push_back(new Model("Models\\cube.obj", "Textures\\SkyBox2.bmp"));
 
 	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 10,1,10 }));
 	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+
+	Win32OpenGL::UseProgram(m_phongShader);
+}
+
+void Game::loadScene()
+{
+	m_scene->load("Scenes\\scene.xml");
 }
 
 void Game::reloadScene()
 {
-	m_scene->load();
+	m_loaded = false;
+	m_scene->load("Scenes\\loading.xml");
+	Draw();
+	RedrawWindow(m_window, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+	m_scene->load("Scenes\\scene.xml");
+	m_loaded = true;
+	Draw();
 }
 
 void Game::Draw()
 {
 	m_win32OpenGL.ClearGLDisplay();
-	Win32OpenGL::UseProgram(m_phongShader);
-	//GLuint program = m_win32OpenGL.GetShaderProgram();
-
-	m_scene->draw(m_phongShader);
-	Win32OpenGL::UseProgram(m_unlitShader);
-	m_objects[m_objects.size() - 2]->draw(m_unlitShader);
-	m_objects[m_objects.size() - 1]->draw(m_unlitShader);
+	if (m_loaded)
+	{
+		m_objects[0]->draw(m_unlitShader);
+		m_objects[1]->draw(m_unlitShader);
+		m_scene->draw(m_phongShader);
+	}
+	else
+	{
+		m_scene->draw(m_unlitShader);
+	}	
 	m_win32OpenGL.FinishedDrawing();
 }
 
