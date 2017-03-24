@@ -176,7 +176,7 @@ void Scene::load(string file)
 				Log::AppendToLogFile("one or more values could not be converted to float type");
 			}
 			// Create a new object with the values loaded from the file and add it to the objects vector.
-			m_objects.push_back(ModelInstance(model, position, rotation, scale));
+			m_objects.push_back(Object(model, position, rotation, scale));
 		}
 
 	// Log the number of objects loaded and the number of objects found in the xml file.

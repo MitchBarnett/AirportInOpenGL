@@ -1,11 +1,11 @@
 #pragma once
 #include "Model.h"
 #include "MathFunc.h"
-class ModelInstance
+class Object
 {
 public:
 
-	ModelInstance(Model* model, vec3 position, vec3 roatation, vec3 scale);
+	Object(Model* model, vec3 position, vec3 roatation, vec3 scale);
 	void draw(GLuint& shaderProgram);
 	void setPosition(vec3 position);
 

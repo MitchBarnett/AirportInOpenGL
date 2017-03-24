@@ -4,9 +4,9 @@
 #include "stdafx.h"
 #include "AirportInOpenGL.h"
 #include <windowsx.h >
-#include "mmsystem.h"	// For game loop timer
+#include "mmsystem.h"	// For program loop timer
 #include <tchar.h>
-#include "Game.h"
+#include "Program.h"
 #include "Keyboard.h"
 
 #define MAX_LOADSTRING 100
@@ -19,7 +19,7 @@ WCHAR			szTitle[MAX_LOADSTRING];			// The title bar text
 WCHAR			szWindowClass[MAX_LOADSTRING];		// The main window class name
 RECT			rect;
 HWND			hWnd;								// An identifier for the window to draw on 
-Game			game;								// Holds a scenes that can be rendered
+Program			program;								// Holds a scenes that can be rendered
 unsigned int	mmTimerDelay = 1000 / 50;			//50Hz = 20ms per frame
 unsigned int	mmTimerId;
 bool			mmTimerInitialised = false;			// If the timer has been started
@@ -51,7 +51,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-	Log::AppendToLogFileWithDate("====== Game started ======");
+	Log::AppendToLogFileWithDate("====== Program started ======");
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -178,29 +178,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
 	case WM_GAMEFRAME:
-		game.Update();
+		program.Update();
 		RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		break;
 	case WM_CREATE:
 		// here is where we create our open gl context
 		hdc = GetDC(hWnd);
 		GetClientRect(hWnd, &rect);
-		game.CreateGLWindow(hdc, rect, hWnd);
+		program.CreateGLWindow(hdc, rect, hWnd);
 		// prepare vbo's and vao's and setup shader
-		game.PrepareToDraw();
+		program.PrepareToDraw();
 		break;
 
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hWnd, &ps);
-		game.Draw();
+		program.Draw();
 		SwapBuffers(hdc);
 		EndPaint(hWnd, &ps);
-		if (!game.m_loaded)
+		if (!program.m_loaded)
 		{
-			game.loadScene();
-			game.m_loaded = true;
+			program.loadScene();
+			program.m_loaded = true;
 
 		}
 	}
@@ -209,7 +209,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		GetClientRect(hWnd, &rect);
 		hdc = GetDC(hWnd);
 		// pass to opengl
-		game.Resize(hdc, rect);
+		program.Resize(hdc, rect);
 		break;
     case WM_COMMAND:
         {
@@ -243,7 +243,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		Keyboard::setKeyDown(short(wParam));
 		break;
 	case WM_MOUSEMOVE:
-		game.HandleMouse();
+		program.HandleMouse();
 		break;
 	
 	case WM_KEYUP:
@@ -252,7 +252,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_DESTROY:
         PostQuitMessage(0);
-		Log::AppendToLogFileWithDate("====== Game exited ======\n\n");
+		Log::AppendToLogFileWithDate("====== Program exited ======\n\n");
         break;
 	default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -303,7 +303,7 @@ INT_PTR CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		else if (LOWORD(wParam) == IDQUIT)
 		{
 			PostQuitMessage(0);
-			Log::AppendToLogFileWithDate("====== Game exited ======\n\n");
+			Log::AppendToLogFileWithDate("====== Program exited ======\n\n");
 		}
 
 		else if (LOWORD(wParam) == IDM_OPTIONS)
@@ -321,7 +321,7 @@ INT_PTR CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		else if (LOWORD(wParam) == IDRELOAD)
 		{
 			EndDialog(hDlg, LOWORD(wParam));
-			game.reloadScene();
+			program.reloadScene();
 			POINT center;
 			center.x = rect.right / 2;
 			center.y = rect.bottom / 2;
@@ -347,7 +347,7 @@ INT_PTR CALLBACK Options(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			wchar_t Text[300] = { 0 };
 			GetWindowText(GetDlgItem(hDlg, IDC_EDIT1), Text, 300);
 			try {
-				game.setSensitivity(stof(Text));
+				program.setSensitivity(stof(Text));
 			}
 			catch(...){}
 			EndDialog(hDlg, LOWORD(wParam));

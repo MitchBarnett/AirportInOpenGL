@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <map>
-#include "ModelInstance.h"
+#include "Object.h"
 
 /*!
 Controls a scene of objects, loads values from an XML file.
@@ -51,6 +51,6 @@ public:
 private:
 	string m_filename;
 	map<string, Model> m_models;  //!< Map of models has a unique name string as a key.
-	vector<ModelInstance> m_objects; //!< Vector of objects used to draw and update them.
+	vector<Object> m_objects; //!< Vector of objects used to draw and update them.
 };
 

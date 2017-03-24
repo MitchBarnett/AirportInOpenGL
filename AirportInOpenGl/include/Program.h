@@ -2,14 +2,14 @@
 #include "Win32OpenGL.h"
 #include "Log.h"
 #include "Model.h"
-#include "ModelInstance.h"
+#include "Object.h"
 #include "Camera.h"
 #include "Light.h"
 #include <Windows.h>
 #include <gl\GL.h>
 #include "Scene.h"
 
-class Game
+class Program
 {
 	// open gl helper class
 	Win32OpenGL m_win32OpenGL;
@@ -35,11 +35,11 @@ class Game
 	
 
 	vector<Model*> m_models;
-	vector<ModelInstance*> m_objects;
+	vector<Object*> m_objects;
 
 public:
-	Game();
-	~Game();
+	Program();
+	~Program();
 	bool m_loaded = false;
 	void CreateGLWindow(HDC hdc, RECT rect, HWND window);
 	void DestroyGLWindow();

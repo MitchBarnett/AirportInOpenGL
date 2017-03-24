@@ -148,15 +148,15 @@
   <ItemGroup>
     <ClInclude Include="include\AirportInOpenGL.h" />
     <ClInclude Include="include\Camera.h" />
-    <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\Keyboard.h" />
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\Log.h" />
     <ClInclude Include="include\MathFunc.h" />
     <ClInclude Include="include\Model.h" />
-    <ClInclude Include="include\ModelInstance.h" />
     <ClInclude Include="include\ModelLoader.h" />
     <ClInclude Include="include\Mouse.h" />
+    <ClInclude Include="include\Object.h" />
+    <ClInclude Include="include\Program.h" />
     <ClInclude Include="include\Resource.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\stdafx.h" />
@@ -175,15 +175,15 @@
   <ItemGroup>
     <ClCompile Include="src\AirportInOpenGL.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Keyboard.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\MathFunc.cpp" />
     <ClCompile Include="src\Model.cpp" />
-    <ClCompile Include="src\ModelInstance.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
     <ClCompile Include="src\Mouse.cpp" />
+    <ClCompile Include="src\Object.cpp" />
+    <ClCompile Include="src\Program.cpp" />
     <ClCompile Include="src\pugixml.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

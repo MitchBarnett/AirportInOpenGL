@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "ModelInstance.h"
+#include "Object.h"
 #include "Win32OpenGl.h"
 
 
-ModelInstance::ModelInstance(Model* model, vec3 position, vec3 roatation, vec3 scale)
+Object::Object(Model* model, vec3 position, vec3 roatation, vec3 scale)
 	:m_model{ model },
 	m_position{position},
 	m_rotation{roatation},
@@ -12,7 +12,7 @@ ModelInstance::ModelInstance(Model* model, vec3 position, vec3 roatation, vec3 s
 	
 }
 
-void ModelInstance::draw(GLuint& shaderProgram)
+void Object::draw(GLuint& shaderProgram)
 {
 	m_modelMatrix = identity_mat4();
 	m_modelMatrix = scale(m_modelMatrix, m_scale);
@@ -26,7 +26,7 @@ void ModelInstance::draw(GLuint& shaderProgram)
 	m_model->draw();
 }
 
-void ModelInstance::setPosition(vec3 position)
+void Object::setPosition(vec3 position)
 {
 	m_position = position;
 }

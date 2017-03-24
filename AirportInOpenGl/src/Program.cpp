@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "Game.h"
+#include "Program.h"
 #include "Model.h"
 #include "Log.h"
 #include "Mouse.h"
 #include "Scene.h"
 
 
-Game::Game()
+Program::Program()
 {
 	// we don't use RAII currently so no action in constructor
 }
 
-Game::~Game()
+Program::~Program()
 {
 }
 
-void Game::CreateGLWindow(HDC hdc, RECT rect, HWND window)
+void Program::CreateGLWindow(HDC hdc, RECT rect, HWND window)
 {
 	m_window = window;
 	m_win32OpenGL.CreateGLContext(hdc);	// may throw an exception!!!
@@ -32,13 +32,13 @@ void Game::CreateGLWindow(HDC hdc, RECT rect, HWND window)
 	Mouse::setPosition(windowCenter, m_window);
 }
 
-void Game::DestroyGLWindow()
+void Program::DestroyGLWindow()
 {
 	m_win32OpenGL.TearDownGLContext();
 }
 
 
-void Game::PrepareToDraw()
+void Program::PrepareToDraw()
 {
 	
 	m_lightColours.push_back(vec3{ 1.0f, 0.0f, 0.0f });
@@ -77,17 +77,17 @@ void Game::PrepareToDraw()
 
 	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass2.bmp"));
 	m_models.push_back(new Model("Models\\cube.obj", "Textures\\SkyBox.bmp"));
-	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
-	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 4,4,4 }));
+	m_objects.push_back(new Object(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new Object(m_models[1], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 4,4,4 }));
 	Win32OpenGL::UseProgram(m_phongShader);
 }
 
-void Game::loadScene()
+void Program::loadScene()
 {
 	m_scene->load("Scenes\\scene.xml");
 }
 
-void Game::reloadScene()
+void Program::reloadScene()
 {
 	m_loaded = false;
 	m_scene->load("Scenes\\loading.xml");
@@ -98,7 +98,7 @@ void Game::reloadScene()
 	Draw();
 }
 
-void Game::Draw()
+void Program::Draw()
 {
 	m_win32OpenGL.ClearGLDisplay();
 	if (m_loaded)
@@ -114,7 +114,7 @@ void Game::Draw()
 	m_win32OpenGL.FinishedDrawing();
 }
 
-void Game::Update()
+void Program::Update()
 {
 	if (GetAsyncKeyState('P'))
 	{
@@ -129,7 +129,7 @@ void Game::Update()
 	m_MainCamera.setViewMatrix(m_unlitShader);
 	// we tumble the cube to see all the faces.
 }
-void Game::HandleMouse()
+void Program::HandleMouse()
 {
 	m_currentMousePos = Mouse::getPosition(m_window);
 
@@ -156,12 +156,12 @@ void Game::HandleMouse()
 	m_MainCamera.setViewMatrix(m_unlitShader);
 }
 
-void Game::setSensitivity(float sensitivity)
+void Program::setSensitivity(float sensitivity)
 {
 	m_MainCamera.m_lookSensitivity = sensitivity;
 }
 
-void Game::Resize(HDC hdc, RECT rect)
+void Program::Resize(HDC hdc, RECT rect)
 {
 	// if the display is resized then OpenGL needs to know about the apect ratio
 	// to compute the correct projection matrix
@@ -172,7 +172,7 @@ void Game::Resize(HDC hdc, RECT rect)
 	Win32OpenGL::SendUniformMatrixToShader(m_unlitShader, m_projectionMatrix.m, "projection_matrix");
 }
 
-void Game::ComputeProjectionMatrix()
+void Program::ComputeProjectionMatrix()
 {
 	// we will look at this later in the course
 	// in Modern OpenGL we must supply a projection matrix
