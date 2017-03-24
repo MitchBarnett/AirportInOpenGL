@@ -17,14 +17,14 @@ public:
 	float m_lookSensitivity = 1.0f;
 	float m_moveSpeed = 1.1f;
 
-	const float startX = 0.0f;
-	const float startY = 1.5f;
-	const float startZ = 5.0f;
+	const float startX = 134.1f;
+	const float startY = 0.8f;
+	const float startZ = 110.3f;
 
 	vec3 m_position{ startX, startY, startZ };
 
 
-	float m_yaw{ 0 };
+	float m_yaw{ -42 };
 	float m_roll{ 0 };
 	float m_pitch{ 0 };
 	

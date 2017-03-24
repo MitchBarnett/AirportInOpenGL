@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "Log.h"
 #include "Mouse.h"
+#include "Keyboard.h"
 #include "Scene.h"
 
 
@@ -53,8 +54,6 @@ void Program::PrepareToDraw()
 
 	// send the matrixes to the shader
 	//GLuint program = m_win32OpenGL.GetShaderProgram();
-	GLuint a;
-	GLuint b;
 	Win32OpenGL::CreateShadersAndProgram("PhongTexture", m_phongShader);
 	Win32OpenGL::SendUniformMatrixToShader(m_phongShader, m_projectionMatrix.m, "projection_matrix");
 	m_MainCamera.setViewMatrix(m_phongShader);
@@ -116,13 +115,46 @@ void Program::Draw()
 
 void Program::Update()
 {
-	if (GetAsyncKeyState('P'))
+	if (Keyboard::checkKeyDown('P'))
 	{
 		Log::AppendToLogFile("Position logged...");
 		Log::AppendToLogFile("X" + to_string(m_MainCamera.m_position.v[0]));
 		Log::AppendToLogFile("Y" + to_string(m_MainCamera.m_position.v[1]));
 		Log::AppendToLogFile("Z" + to_string(m_MainCamera.m_position.v[2]));		
 	}
+	if (Keyboard::checkKeyDown('R'))
+	{
+		Log::AppendToLogFile("Rotation logged...");
+		Log::AppendToLogFile("Pitch" + to_string(m_MainCamera.m_pitch));
+		Log::AppendToLogFile("Yaw" + to_string(m_MainCamera.m_yaw));
+		Log::AppendToLogFile("Roll" + to_string(m_MainCamera.m_roll));
+	}
+	if (Keyboard::checkKeyDown('1'))
+	{
+		m_MainCamera.m_position = {136,1,110};
+		m_MainCamera.m_pitch = 0;
+		m_MainCamera.m_yaw = 27;
+	}
+	if (Keyboard::checkKeyDown('2'))
+	{
+		m_MainCamera.m_position = { 257,1,73 };
+		m_MainCamera.m_pitch = 0;
+		m_MainCamera.m_yaw = 93;
+	}
+	if (Keyboard::checkKeyDown('3'))
+	{
+		m_MainCamera.m_position = { 300,58,207 };
+		m_MainCamera.m_pitch = -19;
+		m_MainCamera.m_yaw = -28;
+	}
+	if (Keyboard::checkKeyDown('4'))
+	{
+		m_MainCamera.m_position = { -80,59,-77 };
+		m_MainCamera.m_pitch = -22;
+		m_MainCamera.m_yaw = 111;
+	}
+
+
 	m_MainCamera.update();
 	m_objects[m_objects.size()-1]->setPosition(m_MainCamera.m_position);
 	m_MainCamera.setViewMatrix(m_phongShader);
