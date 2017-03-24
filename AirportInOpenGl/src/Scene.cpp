@@ -128,7 +128,7 @@ void Scene::load(string file)
 			}
 			if (positionNode.attribute("z").value() != "")
 			{
-				try { position.v[1] = stof(positionNode.attribute("y").value()); }
+				try { position.v[2] = stof(positionNode.attribute("z").value()); }
 				catch (std::invalid_argument& e) { errorFlag = true; }
 			}
 		}

@@ -14,13 +14,12 @@ public:
 	Camera();
 	~Camera();
 
-	float m_lookSensitivity = 1;
-	float m_moveSpeed = 0.1;
+	float m_lookSensitivity = 1.0f;
+	float m_moveSpeed = 1.1f;
 
-	const float startX = 0;
+	const float startX = 0.0f;
 	const float startY = 1.5f;
-	const float startZ = 5;
-
+	const float startZ = 5.0f;
 
 	vec3 m_position{ startX, startY, startZ };
 

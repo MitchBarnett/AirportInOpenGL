@@ -26,7 +26,7 @@ class Game
 	float m_aspectRatio;
 
 	Camera m_MainCamera;
-	Light m_mainLight{ vec3{ 0.0f, 5.0f, 5.0f } };
+	Light m_mainLight{ vec3{ 0.0f, 30.0f, 20.0f } };
 
 	GLuint m_phongShader;
 	GLuint m_unlitShader;

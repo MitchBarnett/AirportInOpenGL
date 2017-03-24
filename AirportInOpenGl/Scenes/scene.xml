@@ -1,33 +1,162 @@
 <scene>
     <models>
-      <model name="oildrum" objfile="Models\oildrum.obj" texturefile="Textures\oildrum.bmp" />
+
+      <!--<model name="oildrum" objfile="Models\oildrum.obj" texturefile="Textures\oildrum.bmp" />
       <model name="cube" objfile="Models\\simpleCubeWithTextures2.obj" texturefile="Textures\\redBrick256x256.bmp" />
       <model name="logPile" objfile="Models\\wood.obj" texturefile="Textures\\WoodTexture3.bmp" />
-      <model name="cessna" objfile="Models\\smallPlane.obj" texturefile="Textures\\smallplane.bmp" />
+      <model name="plane" objfile="Models\\smallPlane.obj" texturefile="Textures\\smallplane.bmp" />-->
+	    <!--<model name="cessna" objfile="Models\\Cessna172.obj" texturefile="Textures\\Cessna172.bmp" />-->
+	    <model name="runway10" objfile="Models\\runway10,28.obj" texturefile="Textures\\runway.bmp" />
+	    <model name="runway15" objfile="Models\\runway15,33.obj" texturefile="Textures\\runway.bmp" />
+      <!--<model name="fk9" objfile="Models\\fk9.obj" texturefile="Textures\\fk9.bmp"/>-->
+      <!--<model name="p92" objfile="Models\\p92.obj" texturefile="Textures\\p92.bmp"/>
+      <model name="pa18" objfile="Models\\pa18.obj" texturefile="Textures\\pa18.bmp"/>
+      <model name="pa28" objfile="Models\\pa28.obj" texturefile="Textures\\pa28.bmp"/>
+	    <model name="10" objfile="Models\\10.obj" texturefile="Textures\\errTex.bmp" />-->
+      <model name="parking" objfile="Models\\parking.obj" texturefile="Textures\\runway.bmp" />
+      <model name="firecar" objfile="Models\\firetruck.obj" texturefile="Textures\\firecar.bmp" />
+      <model name="audired" objfile="Models\\audi.obj" texturefile="Textures\\AudiA4.bmp" />
+      <model name="audiblue" objfile="Models\\audi.obj" texturefile="Textures\\Audiblue.bmp" />
+      <model name="audisilver" objfile="Models\\audi.obj" texturefile="Textures\\Audisilver.bmp" />
+      <model name="carpark" objfile="Models\\carParking.obj" texturefile="Textures\\carpark.bmp" />
+      <model name="controlTower" objfile="Models\\ct.obj" texturefile="Textures\\ct.bmp" />
+      <model name="controlTowerWindow" objfile="Models\\ctWindow.obj" texturefile="Textures\\ctWindow.bmp" />
+      <model name="information" objfile="Models\\imagePane.obj" texturefile="Textures\\information.bmp" />
     </models>
-    <objects>
-      <object model="oildrum"/>
-      <object model="logPile">
-        <position x="1"/>
-      </object>
-      <object model="oildrum">
-        <position x="-1"/>
-        <rotation yaw="90"/>
-      </object>
-      <object model="logPile">
-        <position x="-2"/>
-        <rotation yaw="90" pitch="45"/>
-      </object>
-      <object model="cessna">
-        <scale x="0.25" y="0.25" z="0.25"/>
-      </object>
-      <object model="cessna">
-        <scale x="0.25" y="0.25" z="0.25"/>
-        <position x="-15" />
-      </object>
-      <object model="cessna">
-        <scale x="0.25" y="0.25" z="0.25"/>
-        <position x="15" />
-      </object>
-    </objects>
+  <objects>
+    <object model="cessna">
+      <scale x="0.3" y="0.3" z="0.3"/>
+      <position y="0.2" x="310" z="55" />
+      <rotation yaw="280" />
+    </object>
+    <object model="plane">
+      <scale x="0.25" y="0.25" z="0.25"/>
+      <position x="-15" />
+    </object>
+    <object model="plane">
+      <scale x="0.25" y="0.25" z="0.25"/>
+      <position x="15" />
+    </object>
+	  <object model="runway10">
+      <position y="0.1" />
+		  <rotation yaw="96.20" />
+    </object>
+	  <object model="runway15">
+      <position x="175" y="0.1" z="-320" />
+		  <rotation yaw="149.20" />
+    </object>
+	  <object model="runway15">
+      <position x="215" y="0.1" z="-40" />
+		  <rotation yaw="39.80" />
+    </object>
+	  <object model="10">
+		  <position y="0.2" x="25" z="300" />
+		  <rotation pitch="-90" yaw="6.20" />
+		  <scale x="50" y="50"/>
+	  </object>
+	  <object model="10">
+		  <position y="0.2" x="25" z="300" />
+		  <rotation pitch="-90" yaw="6.20" />
+		  <scale x="50" y="50"/>
+	  </object>
+    <object model="fk9">
+		  <position y="0.2" x="5" z="5" />
+	  </object>
+    <object model="p92">
+		  <position y="0.2" x="-5" z="-5" />
+	  </object>
+    <object model="pa18">
+		  <position y="0.2" x="290" z="65" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+      <rotation yaw="220" />
+	  </object>
+    <object model="pa28">
+		  <position x="287" z="93" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+      <rotation yaw="20" />
+	  </object>
+    <object model="parking">
+		  <position y="0.2" x="300" z="75" />
+      <rotation yaw="220" />
+	  </object>
+    <object model="audired">
+      <position x="138.5" z="109.5" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+	  </object>
+    <object model="audired">
+      <position x="136" z="118.5" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+	  </object>
+    <object model="audired">
+      <position x="133.5" z="123" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+	  </object>
+    <object model="audiblue">
+      <position x="133.5" z="116" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+	  </object>
+    <object model="audiblue">
+      <position x="144.5" z="116" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+	  </object>
+    <object model="audiblue">
+      <position x="135.5" z="125.5" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+	  </object>
+    <object model="audiblue">
+      <position x="132.5" z="121.5" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+	  </object>
+    <object model="audisilver">
+      <position x="137" z="120" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+    </object>
+    <object model="audisilver">
+      <position x="141.5" z="120.5" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+    </object>
+    <object model="audisilver">
+      <position x="140.5" z="112.5" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+    </object>
+    <object model="audisilver">
+      <position x="129" z="117.5" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5"/>
+    </object>
+    <object model="carpark">
+      <position y="0.1" x="139" z="120" />
+      <rotation yaw="130" />
+      <scale x="0.5" z="0.5"/>
+    </object>
+    <object model="controlTower">
+      <position y="0" x="129" z="106" />
+      <rotation yaw="40" />
+      <scale x="0.5" z="0.5"/>
+    </object>
+    <object model="controlTowerWindow">
+      <position y="7" x="131" z="107" />
+      <rotation yaw="40" />
+      <scale x="0.5" y="0.5" z="0.5" />
+    </object>
+    <object model="firecar">
+      <position y="0" x="133" z="102" />
+      <rotation yaw="130" />
+      <scale x="0.5" y="0.5" z="0.5" />
+    </object>
+    <object model="information">
+      <position y="2" x="0" z="0" />
+      <scale x="3" y="3" z="3" />
+    </object>
+  </objects>
 </scene>

@@ -75,12 +75,10 @@ void Game::PrepareToDraw()
 
 	m_scene = new Scene("Scenes\\loading.xml");
 
-	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass.bmp"));
-	m_models.push_back(new Model("Models\\cube.obj", "Textures\\SkyBox2.bmp"));
-
-	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 10,1,10 }));
-	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
-
+	m_models.push_back(new Model("Models\\ground.obj", "Textures\\grass2.bmp"));
+	m_models.push_back(new Model("Models\\cube.obj", "Textures\\SkyBox.bmp"));
+	m_objects.push_back(new ModelInstance(m_models[0], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 1,1,1 }));
+	m_objects.push_back(new ModelInstance(m_models[1], vec3{ 0,0,0 }, vec3{ 0,0,0 }, vec3{ 4,4,4 }));
 	Win32OpenGL::UseProgram(m_phongShader);
 }
 
@@ -118,7 +116,13 @@ void Game::Draw()
 
 void Game::Update()
 {
-	
+	if (GetAsyncKeyState('P'))
+	{
+		Log::AppendToLogFile("Position logged...");
+		Log::AppendToLogFile("X" + to_string(m_MainCamera.m_position.v[0]));
+		Log::AppendToLogFile("Y" + to_string(m_MainCamera.m_position.v[1]));
+		Log::AppendToLogFile("Z" + to_string(m_MainCamera.m_position.v[2]));		
+	}
 	m_MainCamera.update();
 	m_objects[m_objects.size()-1]->setPosition(m_MainCamera.m_position);
 	m_MainCamera.setViewMatrix(m_phongShader);
@@ -177,7 +181,7 @@ void Game::ComputeProjectionMatrix()
 
 	// input variables
 	float zNear = 0.1f;		// clipping plane
-	float zFar = 500.0f;	// clipping plane
+	float zFar = 1500.0f;	// clipping plane
 	float fov = static_cast<float>(67.0f * ONE_DEG_IN_RAD); // convert 67 degrees to radians
 
 	float range = tan(fov * 0.5f) * zNear;

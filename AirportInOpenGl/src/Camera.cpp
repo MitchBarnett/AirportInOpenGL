@@ -118,19 +118,34 @@ void Camera::update()
 	}
 	if (Keyboard::checkKeyDown('A'))
 	{
-		distanceMovedRight += -0.1;
+		distanceMovedRight += -0.1f;
 	}
 	if (Keyboard::checkKeyDown('D'))
 	{
-		distanceMovedRight += +0.1;
+		distanceMovedRight += +0.1f;
 	}
 	if (Keyboard::checkKeyDown(VK_SHIFT))
 	{
-		m_position.v[1] += 0.1;
+		if (Keyboard::checkKeyDown(VK_SPACE))
+		{
+			m_position.v[1] += 1.0f;
+		}
+		else
+		{
+			m_position.v[1] += 0.1f;
+		}
+		
 	}
 	if (Keyboard::checkKeyDown(VK_CONTROL))
 	{
-		m_position.v[1] -= 0.1;
+		if (Keyboard::checkKeyDown(VK_SPACE))
+		{
+			m_position.v[1] -= 1;
+		}
+		else
+		{
+			m_position.v[1] -= 0.1f;
+		}
 	}
 
 	// MORE KEY RESPONSES HERE
@@ -149,6 +164,11 @@ void Camera::updateCameraPosition(float distanceMovedForward, float distanceMove
 		float magicNumber = 0.7071f;
 		distanceMovedForward *= magicNumber;
 		distanceMovedRight *= magicNumber;
+	}
+	if (Keyboard::checkKeyDown(VK_SPACE))
+	{
+		distanceMovedForward *= 10;
+		distanceMovedRight *= 10;
 	}
 	// later might use matrices to calculate this....
 	// for now use angle in xz and stay on ground....
