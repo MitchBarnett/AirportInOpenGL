@@ -5,6 +5,7 @@
     <objects>
       <object model="imagePane">
         <scale x="3" y="3"/>
-        <position y="1.5">
+        <position x="131.3" z="106.4" y="0.8" />
+	   <rotation yaw="42"/>
     </objects>
 </scene>

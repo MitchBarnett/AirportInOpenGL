@@ -4,7 +4,7 @@
 	  <model name="cessna" objfile="Models\\Cessna172.obj" texturefile="Textures\\Cessna172.bmp" />
 	  <model name="runway10" objfile="Models\\runway10,28.obj" texturefile="Textures\\runway.bmp" />
 	  <model name="runway15" objfile="Models\\runway15,33.obj" texturefile="Textures\\runway.bmp" />
-    <model name="fk9" objfile="Models\\fk9.obj" texturefile="Textures\\fk9.bmp"/>-->
+    <model name="fk9" objfile="Models\\fk9.obj" texturefile="Textures\\fk9.bmp"/>
     <model name="pa18" objfile="Models\\pa18.obj" texturefile="Textures\\pa18.bmp"/>
     <model name="pa28" objfile="Models\\pa28.obj" texturefile="Textures\\pa28.bmp"/>
 	  <model name="10" objfile="Models\\10.obj" texturefile="Textures\\errTex.bmp" />
